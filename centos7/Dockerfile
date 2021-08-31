@@ -30,7 +30,7 @@ RUN yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
     rm -rf ~/git-2.32*
 
 # Add nodejs
-RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
+RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash - && \
     yum install -y nodejs
 
 RUN pip3 install py3createtorrent
