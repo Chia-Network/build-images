@@ -33,7 +33,7 @@ RUN yum -y groupinstall "Development Tools" && \
 
 # Add nodejs
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - && \
+RUN curl -fsSL https://rpm.nodesource.com/setup_16.x | bash - && \
     yum install -y nodejs && \
     yum clean all && \
     pip3 install --no-cache-dir py3createtorrent
