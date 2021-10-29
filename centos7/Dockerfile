@@ -18,7 +18,7 @@ RUN yum -y groupinstall "Development Tools" && \
     rm -rf ~/Python-3.9* && \
 
     # Compile newer version of git (actions runner needs it)
-    yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-CPAN perl-devel && \
+    yum -y install ca-certificates curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-CPAN perl-devel && \
     cd ~ && \
     wget -q https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.32.0.tar.gz && \
     tar xvf git-2.32.0.tar.gz && \
