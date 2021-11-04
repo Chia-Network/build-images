@@ -7,15 +7,16 @@ RUN apt-get update && \
         build-essential \
         curl \
         dialog \
-        git \
         jq \
         software-properties-common \
         vim \
         wget \
         zlib1g-dev && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
+    add-apt-repository ppa:git-core/ppa && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         fakeroot \
+        git \
         python3.8 \
         python3.8-venv \
         libpython3.8-dev \
