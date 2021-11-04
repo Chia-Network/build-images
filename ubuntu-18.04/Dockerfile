@@ -18,6 +18,7 @@ RUN apt-get update && \
         python3.8-venv \
         libpython3.8-dev \
         python3.8-distutils \
+        sudo \
         vim \
         wget \
         zlib1g-dev && \
