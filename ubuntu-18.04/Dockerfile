@@ -22,10 +22,10 @@ RUN apt-get update && \
         wget \
         zlib1g-dev && \
     # Sets up some useful symlinks \
-    ln -sf $(which python3.8) /usr/bin/python && \
-    ln -sf $(which python3.8) /usr/bin/python3 && \
-    ln -sf $(which pip3.8) /usr/bin/pip && \
-    ln -sf $(which pip3.8) /usr/bin/pip3 && \
+    ln -sf "$(which python3.8)" /usr/bin/python && \
+    ln -sf "$(which python3.8)" /usr/bin/python3 && \
+    ln -sf "$(which pip3.8)" /usr/bin/pip && \
+    ln -sf "$(which pip3.8)" /usr/bin/pip3 && \
     python3 -m ensurepip && \
     pip3 install --no-cache-dir py3createtorrent && \
     rm -rf /var/lib/apt/lists/*
