@@ -5,5 +5,7 @@
 ignored:
   - DL3003 # Use WORKDIR to switch to a directory.
   - DL3033 # require yum specific versions
+  - DL3008 # Require apt specific versions
   - DL4001
   - DL3013
+  - DL3015
