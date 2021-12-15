@@ -6,8 +6,18 @@ RUN yum -y groupinstall "Development Tools" && \
     # relies on epel
     yum -y install jq && \
 
+    # Compile newer version of openssl that supports TLS 1.3
+    yum -y install bzip2-devel ca-certificates libffi-devel sqlite-devel zlib-devel pcre-devel perl-core && \
+    cd ~ && \
+    wget -q https://ftp.openssl.org/source/openssl-1.1.1k.tar.gz && \
+    tar -xzvf openssl-1.1.1k.tar.gz && \
+    cd openssl-1.1.1k && \
+    ./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib no-shared zlib-dynamic && \
+    make && \
+    make test && \
+    make install && \
+
     # Compile newer version of python3
-    yum -y install openssl11-devel bzip2-devel libffi-devel sqlite-devel && \
     cd ~ && \
     wget -q https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz && \
     tar xvf Python-3.9.6.tgz && \
@@ -18,7 +28,7 @@ RUN yum -y groupinstall "Development Tools" && \
     rm -rf ~/Python-3.9* && \
 
     # Compile newer version of git (actions runner needs it)
-    yum -y install ca-certificates curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-CPAN perl-devel && \
+    yum -y install ca-certificates curl-devel expat-devel gettext-devel perl-CPAN perl-devel && \
     cd ~ && \
     wget -q https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.32.0.tar.gz && \
     tar xvf git-2.32.0.tar.gz && \
