@@ -7,7 +7,7 @@ RUN yum -y groupinstall "Development Tools" && \
     yum -y install jq && \
 
     # Compile newer version of python3
-    yum -y install openssl-devel bzip2-devel libffi-devel sqlite-devel && \
+    yum -y install openssl11-devel bzip2-devel libffi-devel sqlite-devel && \
     cd ~ && \
     wget -q https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz && \
     tar xvf Python-3.9.6.tgz && \
