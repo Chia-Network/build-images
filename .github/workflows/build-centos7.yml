@@ -23,9 +23,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PAT }}
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            chianetwork/centos7-builder
+          tags: |
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+            type=sha,format=long
+
       - name: Build Docker Container
         uses: docker/build-push-action@v2
         with:
           context: ./centos7
           push: true
-          tags: "chianetwork/centos7-builder:${{ github.sha }},chianetwork/centos7-builder:latest"
+          tags: ${{ steps.meta.outputs.tags }}
