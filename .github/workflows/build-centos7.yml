@@ -8,6 +8,7 @@ on:
       - 'centos7/*'
       - '.github/workflows/build-centos7.yml'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
