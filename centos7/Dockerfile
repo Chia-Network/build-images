@@ -45,7 +45,7 @@ RUN yum -y install bzip2-devel libffi-devel && \
 
     # Compile newer version of git (actions runner needs it)
 RUN yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm && \
-    yum install git && \
+    yum install -y git && \
     yum clean all
 
 #RUN yum -y install curl-devel expat-devel gettext-devel perl-CPAN perl-devel zlib-devel && \
