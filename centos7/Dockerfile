@@ -44,18 +44,22 @@ RUN yum -y install bzip2-devel libffi-devel && \
     yum clean all
 
     # Compile newer version of git (actions runner needs it)
-RUN yum -y install curl-devel expat-devel gettext-devel perl-CPAN perl-devel zlib-devel && \
-    cd ~ && \
-    wget -q https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.34.1.tar.gz && \
-    tar xvf git-2.34.1.tar.gz && \
-    cd git-2.34* && \
-    make configure && \
-    ./configure --prefix=/usr && \
-    make all && \
-    make install && \
-    cd ~ && \
-    rm -rf ~/git-2.34* && \
+RUN yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm && \
+    yum install git && \
     yum clean all
+
+#RUN yum -y install curl-devel expat-devel gettext-devel perl-CPAN perl-devel zlib-devel && \
+#    cd ~ && \
+#    wget -q https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.34.1.tar.gz && \
+#    tar xvf git-2.34.1.tar.gz && \
+#    cd git-2.34* && \
+#    make configure && \
+#    ./configure --prefix=/usr && \
+#    make all && \
+#    make install && \
+#    cd ~ && \
+#    rm -rf ~/git-2.34* && \
+#    yum clean all
 
 # Add nodejs
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
