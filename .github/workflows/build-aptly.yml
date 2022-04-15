@@ -7,6 +7,8 @@ on:
     paths:
       - 'aptly/*'
       - '.github/workflows/build-aptly.yml'
+  schedule:
+    - cron: '30 12 * * 5'
 
 concurrency:
   group: "aptly"
