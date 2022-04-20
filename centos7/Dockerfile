@@ -18,8 +18,8 @@ RUN yum -y groupinstall "Development Tools" && \
     rm -rf ~/sqlite-autoconf* && \
     yum clean all
 
-    # Compile newer version of python3
-    # CVE-2022-0778 fixed in openssl11-1.1.1k-3.el7 https://bugzilla.redhat.com/show_bug.cgi?id=2064913
+# Compile newer version of python3
+# CVE-2022-0778 fixed in openssl11-1.1.1k-3.el7 https://bugzilla.redhat.com/show_bug.cgi?id=2064913
 RUN yum -y install openssl11 openssl11-devel bzip2-devel libffi-devel zlib-devel && \
     cd ~ && \
     wget -q https://www.python.org/ftp/python/3.9.9/Python-3.9.9.tgz && \
@@ -53,3 +53,9 @@ RUN curl -fsSL https://rpm.nodesource.com/setup_16.x | bash - && \
     yum install -y nodejs && \
     yum clean all && \
     pip3 install --no-cache-dir py3createtorrent
+
+# Add FPM
+RUN gpg2 --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB && \
+    curl -sSL https://get.rvm.io | bash -s stable && \
+    /bin/bash -l -c ". /etc/profile.d/rvm.sh && rvm install ruby-3 && gem install fpm" && \
+    yum clean all
