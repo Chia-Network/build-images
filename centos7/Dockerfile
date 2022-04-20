@@ -2,7 +2,7 @@ FROM centos:7
 
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
-    yum -y install awscli ca-certificates epel-release vim wget && \
+    yum -y install awscli ca-certificates epel-release rpm-build squashfs-tools vim wget && \
     # relies on epel
     yum -y install jq && \
 
