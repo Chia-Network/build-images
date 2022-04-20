@@ -2,7 +2,7 @@ FROM centos:7
 
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
-    yum -y install awscli ca-certificates epel-release rpm-build squashfs-tools vim wget && \
+    yum -y install ca-certificates epel-release rpm-build squashfs-tools vim wget && \
     # relies on epel
     yum -y install jq && \
 
@@ -33,6 +33,9 @@ RUN yum -y install openssl11 openssl11-devel bzip2-devel libffi-devel zlib-devel
     cd ~ && \
     rm -rf ~/Python-3.9* && \
     yum clean all
+
+RUN pip3 install --upgrade pip && \
+    pip3 install awscli
 
 RUN yum -y install curl-devel expat-devel gettext-devel perl-CPAN perl-devel zlib-devel && \
     cd ~ && \
