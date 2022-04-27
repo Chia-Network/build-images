@@ -7,11 +7,15 @@ on:
     paths:
       - 'aptly/*'
       - '.github/workflows/build-aptly.yml'
+  pull_request:
+  workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'
 
 concurrency:
-  group: "aptly"
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
 
 jobs:
   build:

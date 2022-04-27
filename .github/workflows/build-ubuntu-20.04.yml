@@ -1,14 +1,16 @@
-name: Build Ubuntu 18.04 Images
+name: Build Ubuntu 20.04 Image
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'ubuntu-18.04/*'
-      - '.github/workflows/build-ubuntu-18.04.yml'
+      - 'ubuntu-20.04/*'
+      - '.github/workflows/build-ubuntu-20.04.yml'
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
 
 concurrency:
   # SHA is added to the end if on `main` to let all main workflows run
@@ -53,7 +55,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            chianetwork/ubuntu-18.04-builder
+            chianetwork/ubuntu-20.04-builder
           tags: |
             type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
             type=sha,format=long
@@ -61,7 +63,7 @@ jobs:
       - name: Build Docker Container
         uses: docker/build-push-action@v2
         with:
-          context: ./ubuntu-18.04
+          context: ./ubuntu-20.04
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
