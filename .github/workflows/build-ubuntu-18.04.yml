@@ -9,6 +9,8 @@ on:
       - '.github/workflows/build-ubuntu-18.04.yml'
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
 
 concurrency:
   # SHA is added to the end if on `main` to let all main workflows run
@@ -19,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Docker Context for Buildx
         id: buildx-context
