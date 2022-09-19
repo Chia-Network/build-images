@@ -64,6 +64,7 @@ RUN gpg2 --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A17031138
     yum clean all
 
 # Add GitHub CLI
-RUN dnf install 'dnf-command(config-manager)' && \
-    dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
-    dnf install gh
+RUN dnf -y update && \
+    dnf -y install 'dnf-command(config-manager)' && \
+    dnf -y config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
+    dnf -y install gh
