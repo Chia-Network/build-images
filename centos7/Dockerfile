@@ -2,7 +2,7 @@ FROM centos:7
 
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
-    yum -y install ca-certificates createrepo epel-release rpm-build squashfs-tools vim wget && \
+    yum -y install ca-certificates createrepo dnf epel-release rpm-build squashfs-tools vim wget && \
     # relies on epel
     yum -y install jq && \
 
@@ -62,3 +62,8 @@ RUN gpg2 --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A17031138
     curl -sSL https://get.rvm.io | bash -s stable && \
     /bin/bash -l -c ". /etc/profile.d/rvm.sh && rvm install ruby-3 && gem install fpm" && \
     yum clean all
+
+# Add GitHub CLI
+RUN dnf install 'dnf-command(config-manager)' && \
+    dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
+    dnf install gh
