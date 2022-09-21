@@ -5,13 +5,16 @@ RUN apt-get update && \
         apt-utils \
         software-properties-common  && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
-    add-apt-repository ppa:git-core/ppa && \
+    add-apt-repository ppa:git-core/ppa -y && \
+    add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
         curl \
         dialog \
         fakeroot \
+        g++-9 \
+        g++-10 \
         git \
         jq \
         python3.8 \
