@@ -5,13 +5,16 @@ RUN apt-get update && \
         apt-utils \
         software-properties-common  && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
-    add-apt-repository ppa:git-core/ppa && \
+    add-apt-repository ppa:git-core/ppa -y && \
+    add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
         curl \
         dialog \
         fakeroot \
+        g++-9 \
+        g++-10 \
         git \
         jq \
         python3.9 \
@@ -36,15 +39,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs
 
 # Newer version of CMAKE
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1.tar.gz && \
-    echo "33fd10a8ec687a4d0d5b42473f10459bb92b3ae7def2b745dc10b192760869f3  cmake-3.23.1.tar.gz" > cmake-3.23.1-sha256.txt && \
-    sha256sum -c cmake-3.23.1-sha256.txt || (echo "Invalid hash for cmake-3.23.1.tar.gz"; exit 1) && \
-    tar -xzvf cmake-3.23.1.tar.gz && \
-    cd cmake-3.23.1 && \
-    ./bootstrap --parallel=$(nproc --all) -- -DCMAKE_USE_OPENSSL=OFF && \
-    make -j $(nproc --all) && \
-    make install && \
-    rm -rf cmake-3.23.1*
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
+    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+    apt-get update && \
+    apt-get install cmake -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Add GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
