@@ -32,6 +32,7 @@ RUN yum -y install openssl11 openssl11-devel bzip2-devel libffi-devel zlib-devel
     make install && \
     cd ~ && \
     rm -rf ~/Python-3.9* && \
+    ln -s /usr/bin/python3 /usr/local/bin/python && \
     yum clean all
 
 RUN pip3 install --upgrade pip && \
