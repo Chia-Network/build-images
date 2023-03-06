@@ -1,0 +1,57 @@
+name: Build Centos Pypa Aarch64 Rust Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'centos-pypa-aarch64/*'
+      - '.github/workflows/build-centos-pypa-aarch64.yml'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Set docker tag to build
+          id: dockertag
+          run: echo "::set-output name=dockertag::ghcr.io/chia-network/centos-pypa-aarch64t:${{ github.sha }}"
+
+# Not sure if this is needed
+#      - name: Docker meta
+#       id: meta
+#        uses: docker/metadata-action@v4
+#        with:
+#          images: |
+#            chianetwork/centos7-builder
+#          tags: |
+#            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+#            type=sha,format=long
+
+      - name: Build Docker Container
+        uses: docker/build-push-action@v2
+        with:
+          context: ./centos-pypa-rust
+          file: ./centos-pypa-rust/Dockerfile
+          push: true
+          tags: ${{ steps.dockertag.outputs.dockertag }}
