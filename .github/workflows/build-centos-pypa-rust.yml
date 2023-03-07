@@ -3,7 +3,7 @@ name: Build Centos Pypa Aarch64 Rust Image
 on:
   push:
     branches:
-      - main
+      - *
     paths:
       - 'centos-pypa-aarch64/*'
       - '.github/workflows/build-centos-pypa-aarch64.yml'
@@ -20,6 +20,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [aarch64, x86_64]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -34,24 +38,29 @@ jobs:
           password: ${{ github.token }}
 
       - name: Set docker tag to build
-          id: dockertag
-          run: echo "::set-output name=dockertag::ghcr.io/chia-network/centos-pypa-aarch64t:${{ github.sha }}"
-
-# Not sure if this is needed
-#      - name: Docker meta
-#       id: meta
-#        uses: docker/metadata-action@v4
-#        with:
-#          images: |
-#            chianetwork/centos7-builder
-#          tags: |
-#            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-#            type=sha,format=long
+        if: matrix.arch == 'aarch64'
+        id: dockertag
+          run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >> "GITHUB_OUTPUT"
 
       - name: Build Docker Container
+        if: matrix.arch == 'aarch64'
         uses: docker/build-push-action@v2
         with:
           context: ./centos-pypa-rust
-          file: ./centos-pypa-rust/Dockerfile
+          file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag.outputs.dockertag }}
+          tags: ${{ steps.dockertag_.outputs.dockertag_${{ matrix.arch }} }}
+
+      - name: Set docker tag to build
+        if: matrix.arch == 'x86_64'
+        id: dockertag
+          run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >> "GITHUB_OUTPUT"
+
+      - name: Build Docker Container
+        if: matrix.arch == 'x86_64'
+        uses: docker/build-push-action@v2
+        with:
+          context: ./centos-pypa-rust
+          file: ./centos-pypa-rust-aarch64/Dockerfile
+          push: true
+          tags: ${{ steps.dockertag_.outputs.dockertag_${{ matrix.arch }} }}
