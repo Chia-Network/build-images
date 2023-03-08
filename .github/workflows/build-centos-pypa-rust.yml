@@ -3,7 +3,7 @@ name: Build Centos Pypa Aarch64 Rust Image
 on:
   push:
     branches:
-      - *
+      - "*"
     paths:
       - 'centos-pypa-aarch64/*'
       - '.github/workflows/build-centos-pypa-aarch64.yml'
