@@ -53,7 +53,7 @@ jobs:
 
       - name: Set docker tag to build
         if: matrix.arch == 'x86_64'
-        id: dockertag
+        id: dockertag1
         run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
@@ -63,4 +63,4 @@ jobs:
           context: ./centos-pypa-rust
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag.outputs.dockertag }}
+          tags: ${{ steps.dockertag.outputs.dockertag1 }}
