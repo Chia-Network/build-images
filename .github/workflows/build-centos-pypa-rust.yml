@@ -49,7 +49,7 @@ jobs:
           context: ./centos-pypa-rust
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag_.outputs.dockertag }}
+          tags: ${{ steps.dockertag.outputs.dockertag }}
 
       - name: Set docker tag to build
         if: matrix.arch == 'x86_64'
@@ -63,4 +63,4 @@ jobs:
           context: ./centos-pypa-rust
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag_.outputs.dockertag }}
+          tags: ${{ steps.dockertag.outputs.dockertag }}
