@@ -46,7 +46,7 @@ jobs:
         if: matrix.arch == 'aarch64'
         uses: docker/build-push-action@v2
         with:
-          context: ./centos-pypa-rust
+          context: ./centos-pypa-rust-aarch64
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
           tags: ${{ steps.dockertag.outputs.dockertag }}
@@ -60,7 +60,7 @@ jobs:
         if: matrix.arch == 'x86_64'
         uses: docker/build-push-action@v2
         with:
-          context: ./centos-pypa-rust
-          file: ./centos-pypa-rust-aarch64/Dockerfile
+          context: ./centos-pypa-rust-x86_64
+          file: ./centos-pypa-rust-x86_64/Dockerfile
           push: true
           tags: ${{ steps.dockertag.outputs.dockertag1 }}
