@@ -57,6 +57,9 @@ jobs:
         id: dockertag1
         run: echo 'dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}' >>$GITHUB_OUTPUT
 
+      - name: Test to see if awk is installed
+        run: awk
+
       - name: Build Docker Container
         if: matrix.arch == 'x86_64'
         uses: docker/build-push-action@v2
