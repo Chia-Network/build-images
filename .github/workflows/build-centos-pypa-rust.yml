@@ -55,7 +55,7 @@ jobs:
       - name: Set docker tag to build
         if: matrix.arch == 'x86_64'
         id: dockertag1
-        run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
+        run: echo 'dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}' >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
         if: matrix.arch == 'x86_64'
