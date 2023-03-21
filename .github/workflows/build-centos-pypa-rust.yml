@@ -1,4 +1,4 @@
-name: Build Centos Pypa Aarch64 Rust Image
+name: Build Centos Pypa Aarch64 & x86_64 Rust Image
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - main
     paths:
       - 'centos-pypa-aarch64/*'
-      - '.github/workflows/build-centos-pypa-aarch64.yml'
+      - 'centos-pypa-x86_64/*'
+      - '.github/workflows/build-centos-pypa-rust.yml'
   pull_request:
   workflow_dispatch:
   schedule:
@@ -63,4 +64,4 @@ jobs:
           context: ./centos-pypa-rust-x86_64
           file: ./centos-pypa-rust-x86_64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag.outputs.dockertag1 }}
+          tags: ${{ steps.dockertag1.outputs.dockertag }}

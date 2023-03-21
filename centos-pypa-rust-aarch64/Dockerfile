@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # Download rustup and checksum
 RUN curl https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init.sha256 | awk '{print $1 " rustup-init"}' > checksum.txt && \
-    curl -O https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
+    curl -O https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init
 
 # Check sha256sum -- fails if rustup-init binary doesn't match sha256 checksum
 RUN cat checksum.txt && \
