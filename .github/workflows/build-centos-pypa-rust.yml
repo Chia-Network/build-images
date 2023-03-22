@@ -40,10 +40,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-# shellcheck disable=SC2296,SC2086
+
       - name: Set docker tag to build
         if: matrix.arch == 'aarch64'
         id: dockertag
+        # shellcheck disable=SC2296,SC2086
         run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
@@ -54,10 +55,11 @@ jobs:
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
           tags: ${{ steps.dockertag.outputs.dockertag }}
-# shellcheck disable=SC2296,SC2086
+
       - name: Set docker tag to build
         if: matrix.arch == 'x86_64'
         id: dockertag1
+        # shellcheck disable=SC2296,SC2086
         run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
