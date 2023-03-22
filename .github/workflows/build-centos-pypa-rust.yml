@@ -1,5 +1,5 @@
 name: Build Centos Pypa Aarch64 & x86_64 Rust Image
-
+# shellcheck disable=SC2296,SC2086
 on:
   push:
     branches:
@@ -44,7 +44,6 @@ jobs:
       - name: Set docker tag to build
         if: matrix.arch == 'aarch64'
         id: dockertag
-        # shellcheck disable=SC2296,SC2086
         run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
@@ -59,7 +58,6 @@ jobs:
       - name: Set docker tag to build
         if: matrix.arch == 'x86_64'
         id: dockertag1
-        # shellcheck disable=SC2296,SC2086
         run: echo "dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}" >>$GITHUB_OUTPUT
 
       - name: Build Docker Container
