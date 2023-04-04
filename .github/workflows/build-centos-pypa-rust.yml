@@ -64,7 +64,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Docker meta
-        if: matrix.arch == 'aarch64'
+        if: matrix.arch == 'x86_64'
         id: meta
         uses: docker/metadata-action@v4
         with:
