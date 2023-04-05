@@ -41,12 +41,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Set docker tag to build
+      - name: Docker meta aarch64
         if: matrix.arch == 'aarch64'
-        id: dockertag
-        run: |
-          # shellcheck disable=SC2296,SC2086
-          echo 'dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}' >>$GITHUB_OUTPUT
+        id: meta_aarch64
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}/centos-pypa-rust-aarch64
+          # generate Docker tags based on the following events/attributes
+          # latest is only tagged if we're on the default branch
+          tags: |
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+            type=sha,format=long
 
       - name: Build Docker Container
         if: matrix.arch == 'aarch64'
@@ -55,14 +61,20 @@ jobs:
           context: ./centos-pypa-rust-aarch64
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag.outputs.dockertag }}
+          tags: ${{ steps.meta_aarch64.outputs.tags }}
 
-      - name: Set docker tag to build
+      - name: Docker meta aarch64
         if: matrix.arch == 'x86_64'
-        id: dockertag1
-        run: |
-          # shellcheck disable=SC2296,SC2086
-          echo 'dockertag=ghcr.io/chia-network/centos-pypa-${{ matrix.arch }}:${{ github.sha }}' >>$GITHUB_OUTPUT
+        id: meta_x86_64
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}/centos-pypa-rust-x86_64
+          # generate Docker tags based on the following events/attributes
+          # latest is only tagged if we're on the default branch
+          tags: |
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+            type=sha,format=long
 
       - name: Build Docker Container
         if: matrix.arch == 'x86_64'
@@ -71,4 +83,4 @@ jobs:
           context: ./centos-pypa-rust-x86_64
           file: ./centos-pypa-rust-x86_64/Dockerfile
           push: true
-          tags: ${{ steps.dockertag1.outputs.dockertag }}
+          tags: ${{ steps.meta_x86_64.outputs.tags }}
