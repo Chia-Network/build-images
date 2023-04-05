@@ -41,7 +41,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Docker meta
+      - name: Docker meta aarch64
         if: matrix.arch == 'aarch64'
         id: meta_aarch64
         uses: docker/metadata-action@v4
@@ -61,9 +61,9 @@ jobs:
           context: ./centos-pypa-rust-aarch64
           file: ./centos-pypa-rust-aarch64/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta_aarch64.outputs.tags }}
 
-      - name: Docker meta
+      - name: Docker meta aarch64
         if: matrix.arch == 'x86_64'
         id: meta_x86_64
         uses: docker/metadata-action@v4
@@ -83,4 +83,4 @@ jobs:
           context: ./centos-pypa-rust-x86_64
           file: ./centos-pypa-rust-x86_64/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta_x86_64.outputs.tags }}
