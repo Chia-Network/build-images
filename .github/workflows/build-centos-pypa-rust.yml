@@ -43,7 +43,7 @@ jobs:
 
       - name: Docker meta
         if: matrix.arch == 'aarch64'
-        id: meta
+        id: meta_aarch64
         uses: docker/metadata-action@v4
         with:
           images: |
@@ -65,7 +65,7 @@ jobs:
 
       - name: Docker meta
         if: matrix.arch == 'x86_64'
-        id: meta
+        id: meta_x86_64
         uses: docker/metadata-action@v4
         with:
           images: |
