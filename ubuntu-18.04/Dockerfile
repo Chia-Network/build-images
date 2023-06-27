@@ -1,10 +1,12 @@
 FROM ubuntu:18.04
 
+ENV PYENV_ROOT=/root/.pyenv
+ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         apt-utils \
-        software-properties-common  && \
-    add-apt-repository ppa:deadsnakes/ppa -y && \
+        software-properties-common && \
     add-apt-repository ppa:git-core/ppa -y && \
     add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
@@ -17,21 +19,27 @@ RUN apt-get update && \
         g++-10 \
         git \
         jq \
-        python3.8 \
-        python3.8-venv \
-        python3-pip \
-        libpython3.8-dev \
-        python3.8-distutils \
+        libbz2-dev \
+        libffi-dev \
+        liblzma-dev \
+        libncursesw5-dev \
+        libreadline-dev \
+        libssl-dev \
+        libsqlite3-dev \
+        libxml2-dev \
+        libxmlsec1-dev \
         sudo \
+        tk-dev \
         vim \
         wget \
+        xz-utils \
         zlib1g-dev && \
-    # Sets up some useful symlinks \
-    ln -sf "$(which python3.8)" /usr/bin/python && \
-    ln -sf "$(which python3.8)" /usr/bin/python3 && \
-    ln -sf "$(which pip3)" /usr/bin/pip && \
-    ln -sf "$(which pip3)" /usr/bin/pip3.8 && \
-    pip3 install --no-cache-dir py3createtorrent && \
+    # Set up pyenv \
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
+    pyenv install 3.8 && \
+    pyenv global 3.8 && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir py3createtorrent && \
     rm -rf /var/lib/apt/lists/*
 
 # Add nodejs
