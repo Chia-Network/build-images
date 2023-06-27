@@ -19,7 +19,6 @@ RUN apt-get update && \
         jq \
         python3.8 \
         python3.8-venv \
-        python3-pip \
         libpython3.8-dev \
         python3.8-distutils \
         sudo \
@@ -27,10 +26,11 @@ RUN apt-get update && \
         wget \
         zlib1g-dev && \
     # Sets up some useful symlinks \
+    python3.8 -m ensurepip && \
     ln -sf "$(which python3.8)" /usr/bin/python && \
     ln -sf "$(which python3.8)" /usr/bin/python3 && \
-    ln -sf "$(which pip3)" /usr/bin/pip && \
-    ln -sf "$(which pip3)" /usr/bin/pip3.8 && \
+    ln -sf "$(which pip3.8)" /usr/bin/pip && \
+    ln -sf "$(which pip3.8)" /usr/bin/pip3 && \
     pip3 install --no-cache-dir py3createtorrent && \
     rm -rf /var/lib/apt/lists/*
 
