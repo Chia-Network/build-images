@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
-ENV PYENV_ROOT=~/.pyenv
-ENV PATH="~/.pyenv/shims:$PYENV_ROOT/bin:$PATH"
+ENV PYENV_ROOT=/root/.pyenv
+ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
