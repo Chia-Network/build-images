@@ -22,6 +22,7 @@ jobs:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
       docker-context: "./ubuntu-22.04"
+      dockerfile: "./ubuntu-22.04/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-22.04-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
