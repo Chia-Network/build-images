@@ -36,8 +36,8 @@ RUN apt-get update && \
         zlib1g-dev && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.9 && \
-    pyenv global 3.9 && \
+    pyenv install 3.10 && \
+    pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
     rm -rf /var/lib/apt/lists/*
