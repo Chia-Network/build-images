@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
@@ -6,7 +6,9 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         apt-utils \
-        software-properties-common  && \
+        gpg \
+        gpg-agent \
+        software-properties-common && \
     add-apt-repository ppa:git-core/ppa -y && \
     add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
@@ -15,8 +17,8 @@ RUN apt-get update && \
         curl \
         dialog \
         fakeroot \
-        g++-9 \
-        g++-10 \
+        g++-12 \
+        g++-13 \
         git \
         jq \
         libbz2-dev \
@@ -36,8 +38,8 @@ RUN apt-get update && \
         zlib1g-dev && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.9 && \
-    pyenv global 3.9 && \
+    pyenv install 3.10 && \
+    pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
     rm -rf /var/lib/apt/lists/*
@@ -49,7 +51,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
 
 # Newer version of CMAKE
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
-    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
     apt-get update && \
     apt-get install cmake -y && \
     rm -rf /var/lib/apt/lists/*

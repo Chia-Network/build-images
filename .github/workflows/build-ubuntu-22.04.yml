@@ -1,12 +1,12 @@
-name: Build Centos 7 Image
+name: Build Ubuntu 22.04 Image
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'centos7/*'
-      - '.github/workflows/build-centos7.yml'
+      - 'ubuntu-22.04/*'
+      - '.github/workflows/build-ubuntu-22.04.yml'
   pull_request:
   workflow_dispatch:
   schedule:
@@ -17,15 +17,13 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
   cancel-in-progress: true
 
-
 jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
-      docker-context: "./centos7"
-      dockerfile: "./centos7/Dockerfile"
-      dockerhub_imagename: "chianetwork/centos7-builder"
-      docker-platforms: linux/amd64
+      docker-context: "./ubuntu-22.04"
+      dockerfile: "./ubuntu-22.04/Dockerfile"
+      dockerhub_imagename: "chianetwork/ubuntu-22.04-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
