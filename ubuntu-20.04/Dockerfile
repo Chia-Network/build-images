@@ -2,16 +2,20 @@ FROM ubuntu:20.04
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+ENV LD_LIBRARY_PATH="/usr/lib"
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         apt-utils \
+        gpg \
+        gpg-agent \
         software-properties-common  && \
     add-apt-repository ppa:git-core/ppa -y && \
     add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
+        ca-certificates \
         curl \
         dialog \
         fakeroot \
@@ -25,7 +29,6 @@ RUN apt-get update && \
         libncursesw5-dev \
         libreadline-dev \
         libssl-dev \
-        libsqlite3-dev \
         libxml2-dev \
         libxmlsec1-dev \
         sudo \
@@ -34,18 +37,35 @@ RUN apt-get update && \
         wget \
         xz-utils \
         zlib1g-dev && \
-    # Set up pyenv \
-    git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
+    rm -rf /var/lib/apt/lists/*
+
+# Compile newer version of sqlite3 \
+RUN cd ~ && \
+    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
+    tar -xzf sqlite-autoconf-3400100.tar.gz && \
+    cd sqlite-autoconf-3400100 && \
+    ./configure --prefix=/usr && \
+    make && \
+    make install && \
+    cd ~ && \
+    rm -rf ~/sqlite-autoconf*
+
+# Set up pyenv \
+RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     pyenv install 3.10 && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    rm -rf /var/lib/apt/lists/*
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
 
 # Add nodejs
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
+ENV NODE_MAJOR=18
+RUN mkdir -p /etc/apt/keyrings/ && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
 # Newer version of CMAKE
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \

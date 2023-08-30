@@ -15,7 +15,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
-        ca-certificates    \
+        ca-certificates \
         curl \
         dialog \
         fakeroot \
