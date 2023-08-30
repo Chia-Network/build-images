@@ -2,14 +2,17 @@ FROM centos:7
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+# Python needs to be able to find the proper sqlite3 install
+ENV LD_LIBRARY_PATH="/usr/lib"
 
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
     yum -y install ca-certificates createrepo dnf epel-release rpm-build squashfs-tools vim wget && \
-    # relies on epel
-    yum -y install jq
+    # jq relies on epel
+    yum -y install jq && \
+    yum clean all
 
-# Compile newer version of sqlite3 \
+# Compile newer version of sqlite3
 RUN cd ~ && \
     wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tar -xzf sqlite-autoconf-3400100.tar.gz && \
@@ -18,8 +21,7 @@ RUN cd ~ && \
     make && \
     make install && \
     cd ~ && \
-    rm -rf ~/sqlite-autoconf* && \
-    yum clean all
+    rm -rf ~/sqlite-autoconf*
 
 # Compile newer version of python3
 # CVE-2022-0778 fixed in openssl11-1.1.1k-3.el7 https://bugzilla.redhat.com/show_bug.cgi?id=2064913
@@ -31,6 +33,7 @@ RUN yum -y install openssl-devel openssl11 openssl11-devel zlib-devel bzip2 bzip
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
     yum clean all
 
 # Add newer git version
