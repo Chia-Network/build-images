@@ -1,0 +1,30 @@
+name: Build Rocky 8 Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'rocky8/*'
+      - '.github/workflows/build-rocky8.yml'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      docker-context: "./rocky8"
+      dockerfile: "./rocky8/Dockerfile"
+      dockerhub_imagename: "chianetwork/rocky8-builder"
+      docker-platforms: linux/amd64
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
