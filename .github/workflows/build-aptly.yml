@@ -8,6 +8,9 @@ on:
       - 'aptly/*'
       - '.github/workflows/build-aptly.yml'
   pull_request:
+    paths:
+      - 'aptly/*'
+      - '.github/workflows/build-aptly.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'

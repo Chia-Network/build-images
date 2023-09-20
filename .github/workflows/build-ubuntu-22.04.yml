@@ -8,6 +8,9 @@ on:
       - 'ubuntu-22.04/*'
       - '.github/workflows/build-ubuntu-22.04.yml'
   pull_request:
+    paths:
+      - 'ubuntu-22.04/*'
+      - '.github/workflows/build-ubuntu-22.04.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'

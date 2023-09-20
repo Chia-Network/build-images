@@ -9,6 +9,10 @@ on:
       - 'centos-pypa-x86_64/*'
       - '.github/workflows/build-centos-pypa-rust.yml'
   pull_request:
+    paths:
+      - 'centos-pypa-aarch64/*'
+      - 'centos-pypa-x86_64/*'
+      - '.github/workflows/build-centos-pypa-rust.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'
