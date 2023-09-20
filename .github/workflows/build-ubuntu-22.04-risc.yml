@@ -1,0 +1,30 @@
+name: Build Ubuntu 22.04 RISC Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ubuntu-22.04-risc/*'
+      - '.github/workflows/build-ubuntu-22.04-risc.yml'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      docker-context: "./ubuntu-22.04-risc"
+      dockerfile: "./ubuntu-22.04-risc/Dockerfile"
+      dockerhub_imagename: "chianetwork/ubuntu-22.04-risc-builder"
+      docker-platforms: linux/riscv64
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
