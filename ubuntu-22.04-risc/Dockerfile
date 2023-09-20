@@ -3,7 +3,8 @@ FROM riscv64/ubuntu:focal
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
-RUN apt-get install -y curl make libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev  \
+RUN apt-get update && \
+    apt-get install -y curl make libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev  \
 #    && \
 #    curl https://pyenv.run | bash && \
 #    PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.8 && \
