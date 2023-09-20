@@ -9,6 +9,10 @@ on:
       - 'manylinux2014_cuda_x86_64/*'
       - '.github/workflows/build-manylinux2014-cuda.yml'
   pull_request:
+    paths:
+      - 'manylinux2014_cuda_aarch64/*'
+      - 'manylinux2014_cuda_x86_64/*'
+      - '.github/workflows/build-manylinux2014-cuda.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'

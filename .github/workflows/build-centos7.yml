@@ -8,6 +8,9 @@ on:
       - 'centos7/*'
       - '.github/workflows/build-centos7.yml'
   pull_request:
+    paths:
+      - 'centos7/*'
+      - '.github/workflows/build-centos7.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'

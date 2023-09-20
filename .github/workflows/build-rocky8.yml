@@ -8,6 +8,9 @@ on:
       - 'rocky8/*'
       - '.github/workflows/build-rocky8.yml'
   pull_request:
+    paths:
+      - 'rocky8/*'
+      - '.github/workflows/build-rocky8.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'
