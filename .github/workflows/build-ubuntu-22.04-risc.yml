@@ -21,6 +21,8 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      runs-on: k8s-public
+      timeout-minutes: 1440
       docker-context: "./ubuntu-22.04-risc"
       dockerfile: "./ubuntu-22.04-risc/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-22.04-risc-builder"
