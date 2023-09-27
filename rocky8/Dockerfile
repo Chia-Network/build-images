@@ -3,7 +3,9 @@ FROM rockylinux:8
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 # Python needs to be able to find the proper sqlite3 install
-ENV LD_LIBRARY_PATH="/usr/lib64"
+ENV CPPFLAGS="-I/usr/sqlite3/include"
+ENV LIBRARY_PATH="/usr/sqlite3/lib"
+ENV LD_LIBRARY_PATH="/usr/sqlite3/lib"
 ENV NVM_DIR="/root/.nvm"
 
 # General Deps
@@ -18,7 +20,7 @@ RUN cd ~ && \
     wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tar -xzf sqlite-autoconf-3400100.tar.gz && \
     cd sqlite-autoconf-3400100 && \
-    CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
+    CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr/sqlite3 && \
     make && \
     make install && \
     cd ~ && \
