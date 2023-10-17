@@ -16,4 +16,4 @@ RUN apt-get update && \
 ENV PATH="/root/.cargo/bin:${PATH}"
 ENV RUST_BACKTRACE=1
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.72.1
