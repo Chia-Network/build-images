@@ -28,6 +28,7 @@ RUN apt-get update && \
         libsqlite3-dev \
         libxml2-dev \
         libxmlsec1-dev \
+        lsb-release \
         sudo \
         tk-dev \
         vim \
