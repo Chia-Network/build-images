@@ -1,7 +1,12 @@
+# So we can copy yq into our container later
+FROM mikefarah/yq:4 AS yq
+
 FROM ubuntu:18.04
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+
+COPY --from=yq /usr/bin/yq /usr/bin/yq
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
