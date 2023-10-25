@@ -1,0 +1,12 @@
+# Automattic IP Blocks http://whois.arin.net/rest/org/AUTOM-93/nets.
+# Can also get from https://jetpack.com/ips-v4.(txt|json)
+# The ticket here has more context on ips https://github.com/Automattic/jetpack/issues/1719
+geo $is_automattic_ip {
+  default         0; # Block everything not in the ranges below
+  {% for block in AUTOMATTIC_IPV4_BLOCKS.split('\n') if block -%}
+  {{ block }} 1;
+  {% endfor -%}
+  {% for block in AUTOMATTIC_IPV6_BLOCKS.split('\n') if block -%}
+  {{ block }} 1;
+  {% endfor %}
+}
