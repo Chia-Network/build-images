@@ -27,6 +27,7 @@ jobs:
       docker-context: "./aptly"
       dockerfile: "./aptly/Dockerfile"
       dockerhub_imagename: "chianetwork/aptly"
+      image_subpath: "aptly"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}

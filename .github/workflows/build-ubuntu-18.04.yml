@@ -27,6 +27,7 @@ jobs:
       docker-context: "./ubuntu-18.04"
       dockerfile: "./ubuntu-18.04/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-18.04-builder"
+      image_subpath: "ubuntu-18.04-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}

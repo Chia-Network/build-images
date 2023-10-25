@@ -1,16 +1,16 @@
-name: Build Rocky 8 Image
+name: Build PHPFPM Image
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'rocky8/*'
-      - '.github/workflows/build-rocky8.yml'
+      - 'phpfpm/*'
+      - '.github/workflows/build-phpfpm.yml'
   pull_request:
     paths:
-      - 'rocky8/*'
-      - '.github/workflows/build-rocky8.yml'
+      - 'phpfpm/*'
+      - '.github/workflows/build-phpfpm.yml'
   workflow_dispatch:
   schedule:
     - cron: '30 12 * * 5'
@@ -24,10 +24,6 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
-      docker-context: "./rocky8"
-      dockerfile: "./rocky8/Dockerfile"
-      dockerhub_imagename: "chianetwork/rocky8-builder"
-      image_subpath: "rocky8-builder"
-    secrets:
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
+      docker-context: "./phpfpm"
+      dockerfile: "./phpfpm/Dockerfile"
+      image_subpath: "phpfpm"

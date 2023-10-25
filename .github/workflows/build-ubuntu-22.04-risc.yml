@@ -30,6 +30,7 @@ jobs:
       dockerfile: "./ubuntu-22.04-risc/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-22.04-risc-builder"
       docker-platforms: linux/riscv64
+      image_subpath: "ubuntu-22.04-risc-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}

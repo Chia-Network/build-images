@@ -29,6 +29,7 @@ jobs:
       dockerfile: "./centos7/Dockerfile"
       dockerhub_imagename: "chianetwork/centos7-builder"
       docker-platforms: linux/amd64
+      image_subpath: "centos7-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
