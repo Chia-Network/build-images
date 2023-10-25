@@ -27,6 +27,7 @@ jobs:
       docker-context: "./rocky8"
       dockerfile: "./rocky8/Dockerfile"
       dockerhub_imagename: "chianetwork/rocky8-builder"
+      image_subpath: "rocky8-builder"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
