@@ -1,0 +1,44 @@
+name: Build WordPress Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'wordpress/*'
+      - '.github/workflows/build-wordpress.yml'
+  pull_request:
+    paths:
+      - 'wordpress/*'
+      - '.github/workflows/build-wordpress.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  get_version:
+    runs-on: ubuntu-latest
+    outputs:
+      WP_VERSION: ${{ steps.wp-version.outputs.WP_VERSION }}
+    steps:
+      - name: Get latest WP version
+        id: wp-version
+        run: |
+          WP_VERSION=$(curl -s https://latest.cmm.io/wordpress)
+          echo "WP_VERSION=$WP_VERSION" >$GITHUB_OUTPUT
+
+  build:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@add-build-args
+    needs:
+      - get_version
+    with:
+      docker-context: "./wordpress"
+      dockerfile: "./wordpress/Dockerfile"
+      image_subpath: "wordpress"
+      build-args: |
+        WORDPRESS_VERSION=${{ needs.get_version.outputs.WP_VERSION }}
