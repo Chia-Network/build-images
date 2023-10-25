@@ -1,0 +1,29 @@
+name: Build PHPFPM Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'phpfpm/*'
+      - '.github/workflows/build-phpfpm.yml'
+  pull_request:
+    paths:
+      - 'phpfpm/*'
+      - '.github/workflows/build-phpfpm.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@add-build-args
+    with:
+      docker-context: "./phpfpm"
+      dockerfile: "./phpfpm/Dockerfile"
+      image_subpath: "phpfpm"
