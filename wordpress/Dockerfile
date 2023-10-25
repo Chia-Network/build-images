@@ -1,8 +1,8 @@
 FROM alpine:latest
 ARG WORDPRESS_VERSION
 ENV WEBROOT=/var/www/html
-ENV UID=33
-ENV GID=33
+ENV USERID=33
+ENV GROUPID=33
 
 RUN wget https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
     && tar -xvzf wordpress-${WORDPRESS_VERSION}.tar.gz \
