@@ -24,6 +24,8 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      runs-on: "linux-arm64"
+      docker-platforms: "linux/arm64"
       docker-context: "./phpfpm"
       dockerfile: "./phpfpm/Dockerfile"
       image_subpath: "phpfpm"
