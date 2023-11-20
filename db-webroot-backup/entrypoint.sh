@@ -27,7 +27,7 @@ mkdir -p /tmp/site-backup/
 mysqldump --single-transaction -h "$DB_HOST" -u "$DB_USER" "-p${DB_PASS}" "$DB_NAME" | gzip > "/tmp/site-backup/${SITENAME}_${DATE}.sql.gz"
 
 # export files
-tar cvzf "/tmp/site-backup/${SITENAME}_${DATE}.tar.gz" -C "$WEBROOT_PATH"
+tar cvzf "/tmp/site-backup/${SITENAME}_${DATE}.tar.gz" -C "$WEBROOT_PATH" .
 
 # sync to amazon
 aws s3 cp "/tmp/site-backup/${SITENAME}_${DATE}.sql.gz" "s3://${BUCKET_NAME}/"
