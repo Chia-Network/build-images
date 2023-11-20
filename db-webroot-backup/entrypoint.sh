@@ -21,6 +21,8 @@ check_env_var "BUCKET_NAME"
 
 DATE=$(date +%d%m%y%H%M)
 
+mkdir -p /tmp/site-backup/
+
 # export database
 mysqldump --single-transaction -h "$DB_HOST" -u "$DB_USER" "-p${DB_PASS}" "$DB_NAME" | gzip > "/tmp/site-backup/${SITENAME}_${DATE}.sql.gz"
 
