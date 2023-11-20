@@ -1,0 +1,29 @@
+name: Build DB/Webroot Backup Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'db-webroot-backup/*'
+      - '.github/workflows/build-db-webroot-backup.yml'
+  pull_request:
+    paths:
+      - 'db-webroot-backup/*'
+      - '.github/workflows/build-db-webroot-backup.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      docker-context: "./db-webroot-backup"
+      dockerfile: "./db-webroot-backup/Dockerfile"
+      image_subpath: "db-webroot-backup"
