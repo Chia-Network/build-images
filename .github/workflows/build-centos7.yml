@@ -25,6 +25,7 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      alternate-latest-mode: true
       docker-context: "./centos7"
       dockerfile: "./centos7/Dockerfile"
       dockerhub_imagename: "chianetwork/centos7-builder"

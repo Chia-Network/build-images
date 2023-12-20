@@ -24,6 +24,7 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      alternate-latest-mode: true
       docker-context: "./rocky8"
       dockerfile: "./rocky8/Dockerfile"
       dockerhub_imagename: "chianetwork/rocky8-builder"
