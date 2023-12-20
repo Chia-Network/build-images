@@ -24,6 +24,7 @@ jobs:
   package:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      alternate-latest-mode: true
       docker-context: "./db-webroot-backup"
       dockerfile: "./db-webroot-backup/Dockerfile"
       image_subpath: "db-webroot-backup"

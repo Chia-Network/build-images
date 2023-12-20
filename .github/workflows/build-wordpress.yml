@@ -37,6 +37,7 @@ jobs:
     needs:
       - get_version
     with:
+      alternate-latest-mode: true
       docker-context: "./wordpress"
       dockerfile: "./wordpress/Dockerfile"
       image_subpath: "wordpress"
