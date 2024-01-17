@@ -1,0 +1,31 @@
+name: Build Centos Pypa x86_64 Rust Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'centos-pypa-x86_64/*'
+      - '.github/workflows/build-centos-pypa-rust-x86_64.yml'
+  pull_request:
+    paths:
+      - 'centos-pypa-x86_64/*'
+      - '.github/workflows/build-centos-pypa-rust-x86_64.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      docker-platforms: linux/amd64
+      docker-context: ./centos-pypa-rust-x86_64
+      dockerfile: ./centos-pypa-rust-x86_64/Dockerfile
+      image_subpath: centos-pypa-rust-x86_64
+      alternate-latest-mode: true
