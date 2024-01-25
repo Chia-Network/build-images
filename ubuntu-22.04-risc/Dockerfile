@@ -10,7 +10,8 @@ RUN apt-get update && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.9 && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.10 && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.11 && \
-    pyenv global 3.11 && \
+    PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.12 && \
+    pyenv global 3.12 && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/.cargo/bin:${PATH}"
