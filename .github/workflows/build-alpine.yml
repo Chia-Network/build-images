@@ -26,6 +26,7 @@ jobs:
     with:
       alternate-latest-mode: true
       docker-context: "./alpine"
+      docker-platforms: linux/amd64
       dockerfile: "./alpine/Dockerfile"
       dockerhub_imagename: "chianetwork/alpine-builder"
       image_subpath: "alpine-builder"
