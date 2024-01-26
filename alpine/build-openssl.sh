@@ -8,7 +8,7 @@ mkdir /musl
 
 wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1w.tar.gz
 tar zxvf OpenSSL_1_1_1w.tar.gz 
-cd openssl-OpenSSL_1_1_1w/
+cd openssl-OpenSSL_1_1_1w/ || exit
 
 CC="/usr/bin/x86_64-alpine-linux-musl-gcc -static" ./Configure no-shared no-async --prefix=/musl --openssldir=/musl/ssl linux-x86_64
 make depend
