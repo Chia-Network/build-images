@@ -12,5 +12,5 @@ cd openssl-OpenSSL_1_1_1w/ || exit
 
 CC="/usr/bin/x86_64-alpine-linux-musl-gcc -static" ./Configure no-shared no-async --prefix=/musl --openssldir=/musl/ssl linux-x86_64
 make depend
-make -j$(nproc)
+make -j"$(nproc)"
 make install
