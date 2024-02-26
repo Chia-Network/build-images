@@ -34,4 +34,4 @@ RUN mkdir -p /ld/usr/bin && \
 
 FROM base as final
 
-COPY --from=ld /ld/usr /
+COPY --from=ld /ld/usr /usr
