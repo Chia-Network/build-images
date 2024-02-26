@@ -24,7 +24,7 @@ FROM base as ld
 RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
     tar -xvzf binutils-2.38.tar.gz && \
     cd binutils-2.38 && \
-    ./configure --enable-ld --disable-gas --disable-gmp --disable-gold --disable gprof --prefix=/ld/usr && \
+    ./configure --enable-ld --disable-gas --disable-gmp --disable-gold --disable-gprof --prefix=/ld/usr && \
     make && \
     make install && \
     ls -la /ld/usr/bin && \
