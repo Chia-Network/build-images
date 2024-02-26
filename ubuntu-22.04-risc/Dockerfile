@@ -1,4 +1,4 @@
-FROM riscv64/ubuntu:focal
+FROM riscv64/ubuntu:focal as base
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
@@ -19,11 +19,15 @@ ENV RUST_BACKTRACE=1
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.72.1
 
+FROM base as ld
+
 RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz \
     tar -xvzf binutils-2.38.tar.gz \
     cd binutils-2.38 \
-    ./configure --disable-gmp --enable-ld --disable-gold --disable-gas --prefix=/usr \
+    ./configure --disable-gmp --enable-ld --disable-gold --disable-gas --prefix=/ld/usr \
     make \
-    make install \
-    cd - \
-    rm -rf binutils-2.38*
+    make install
+
+FROM base as final
+
+COPY --from=ld /ld/usr /
