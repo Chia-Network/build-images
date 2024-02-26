@@ -30,8 +30,10 @@ FROM base as ld
 #     make install
 
 RUN mkdir -p /ld/usr/bin && \
-    touch /ld/usr/bin/woohoo
+    touch /ld/usr/bin/woohoo && \
+    ls -la /ld/usr/bin
 
 FROM base as final
 
 COPY --from=ld /ld/usr /usr
+RUN ls -la /usr/bin
