@@ -22,12 +22,15 @@ RUN apt-get update && \
 
 FROM base as ld
 
-RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
-    tar -xvzf binutils-2.38.tar.gz && \
-    cd binutils-2.38 && \
-    ./configure --disable-gmp --enable-ld --disable-gold --disable-gas --prefix=/ld/usr && \
-    make && \
-    make install
+# RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
+#     tar -xvzf binutils-2.38.tar.gz && \
+#     cd binutils-2.38 && \
+#     ./configure --disable-gmp --enable-ld --disable-gold --disable-gas --prefix=/ld/usr && \
+#     make && \
+#     make install
+
+RUN mkdir -p /ld/usr/bin && \
+    touch /ld/usr/bin/woohoo
 
 FROM base as final
 
