@@ -5,6 +5,7 @@ FROM riscv64/ubuntu:focal as base
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential cmake curl git make libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
+    echo delete this line when uncommenting below
 #     curl https://pyenv.run | bash && \
 #     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.8 && \
 #     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.9 && \
