@@ -3,6 +3,9 @@ FROM riscv64/ubuntu:focal
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential cmake curl wget git make libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev
+
 # Compile newer version of sqlite3 \
 RUN wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tar -xzf sqlite-autoconf-3400100.tar.gz && \
@@ -11,9 +14,7 @@ RUN wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     make && \
     make install
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential cmake curl git make libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
-    curl https://pyenv.run | bash && \
+RUN curl https://pyenv.run | bash && \
     # PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.8 && \
     # PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.9 && \
     # PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.10 && \
