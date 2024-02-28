@@ -1,7 +1,7 @@
 FROM riscv64/ubuntu:focal as base
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential cmake curl wget git make libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
 FROM base as ld
