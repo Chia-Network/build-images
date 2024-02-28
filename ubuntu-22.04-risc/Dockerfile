@@ -8,12 +8,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Compile newer version of sqlite3 \
-RUN wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
+RUN cd ~ && \
+    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tar -xzf sqlite-autoconf-3400100.tar.gz && \
     cd sqlite-autoconf-3400100 && \
-    CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/sqlite/usr && \
+    CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
     make && \
-    make install
+    make install && \
+    cd ~ && \
+    rm -rf ~/sqlite-autoconf*
 
 RUN curl https://pyenv.run | bash && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.8 && \
