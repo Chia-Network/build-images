@@ -10,7 +10,7 @@ ENV NVM_DIR="/root/.nvm"
 
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
-    yum -y install ca-certificates createrepo dnf epel-release git rpm-build squashfs-tools vim wget && \
+    yum -y install ca-certificates createrepo dnf epel-release git procps rpm-build squashfs-tools vim wget && \
     # jq relies on epel
     yum -y install jq && \
     yum clean all
