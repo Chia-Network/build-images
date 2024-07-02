@@ -29,3 +29,4 @@ jobs:
       dockerfile: ./centos-pypa-rust-x86_64/Dockerfile
       image_subpath: centos-pypa-rust-x86_64
       alternate-latest-mode: true
+      push: ${{ github.event_name != 'pull_request' }}
