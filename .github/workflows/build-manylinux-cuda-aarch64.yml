@@ -29,3 +29,4 @@ jobs:
       dockerfile: ./manylinux_cuda_aarch64/Dockerfile
       image_subpath: manylinux_cuda_aarch64
       alternate-latest-mode: true
+      push: ${{ github.event_name != 'pull_request' }}
