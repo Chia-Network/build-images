@@ -24,7 +24,7 @@ RUN wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     make && \
     make install && \
     ls -la /sqlite/usr/bin && \
-    sqlite -version
+    /sqlite/usr/bin/sqlite3 -version
 
 FROM base as final
 
@@ -34,7 +34,7 @@ COPY --from=sqlite /sqlite/usr /usr
 
 RUN ls -la /usr/bin && \
     ld --version && \
-    sqlite -version
+    sqlite3 -version
 
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
