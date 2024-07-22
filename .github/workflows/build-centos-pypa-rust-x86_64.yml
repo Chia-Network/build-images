@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - 'centos-pypa-x86_64/*'
+      - 'centos-pypa-rust-x86_64/*'
       - '.github/workflows/build-centos-pypa-rust-x86_64.yml'
   pull_request:
     paths:
-      - 'centos-pypa-x86_64/*'
+      - 'centos-pypa-rust-x86_64/*'
       - '.github/workflows/build-centos-pypa-rust-x86_64.yml'
   workflow_dispatch:
   schedule:
@@ -29,3 +29,4 @@ jobs:
       dockerfile: ./centos-pypa-rust-x86_64/Dockerfile
       image_subpath: centos-pypa-rust-x86_64
       alternate-latest-mode: true
+      push: ${{ github.event_name != 'pull_request' }}

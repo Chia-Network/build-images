@@ -1,4 +1,4 @@
-FROM quay.io/pypa/manylinux2014_aarch64
+FROM quay.io/pypa/manylinux_2_28_aarch64
 
 WORKDIR /usr/src/app
 
