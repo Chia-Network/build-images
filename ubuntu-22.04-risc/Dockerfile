@@ -13,7 +13,7 @@ RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
     make && \
     make install && \
     ls -la /ld/usr/bin && \
-    ld --version
+    /ld/usr/bin/ld --version
 
 FROM base as final
 
