@@ -1,4 +1,4 @@
-FROM ubuntu:focal as base
+FROM riscv64/ubuntu:focal as base
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y tree build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
