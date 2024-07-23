@@ -41,11 +41,12 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
 
+#ARG PYTHONSTRICTEXTENSIONBUILD=1
 ARG PYTHON_CONFIGURE_OPTS="--enable-shared"
 
 # for 3.8 - 3.10
 ARG LDFLAGS="-L/opt/sqlite3/lib -lsqlite3"
-ARG CPPFLAGS=-I/opt/sqlite3/include
+ARG CPPFLAGS="-I/opt/sqlite3/include"
 
 RUN pyenv install 3.8
 #RUN pyenv install 3.9
@@ -57,19 +58,15 @@ RUN pyenv install 3.8
 #ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} LIBSQLITE3_LIBS='-L/opt/sqlite3/lib -lsqlite3'"
 #ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} LIBSQLITE3_CFLAGS=-I/opt/sqlite3/include"
 
-ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig"
+#ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig"
 
 RUN tree /opt
-ARG PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig
-RUN pkg-config sqlite3 --cflags
-RUN pkg-config sqlite3 --libs
+ENV LD_LIBRARY_PATH="/opt/sqlite3/lib"
 
 RUN pyenv install 3.11
 #RUN pyenv install 3.12
 
 RUN pyenv global 3.11 3.8
-
-ENV LD_LIBRARY_PATH="/opt/sqlite3/lib"
 
 RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)')
 #RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)')
