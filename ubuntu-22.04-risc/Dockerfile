@@ -41,41 +41,31 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
 
-#ARG PYTHONSTRICTEXTENSIONBUILD=1
 ARG PYTHON_CONFIGURE_OPTS="--enable-shared"
 
-# for 3.8 - 3.10
 ARG LDFLAGS="-L/opt/sqlite3/lib -lsqlite3"
 ARG CPPFLAGS="-I/opt/sqlite3/include"
 
 RUN pyenv install 3.8
-#RUN pyenv install 3.9
-#RUN pyenv install 3.10
+RUN pyenv install 3.9
+RUN pyenv install 3.10
 
-# for 3.11+
-#ARG LIBSQLITE3_LIBS=-L/opt/sqlite3/lib -lsqlite3
-#ARG LIBSQLITE3_CFLAGS=-I/opt/sqlite3/include
-#ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} LIBSQLITE3_LIBS='-L/opt/sqlite3/lib -lsqlite3'"
-#ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} LIBSQLITE3_CFLAGS=-I/opt/sqlite3/include"
-
-#ARG PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig"
-
-RUN tree /opt
+# needed only for the 3.11+ builds
 ENV LD_LIBRARY_PATH="/opt/sqlite3/lib"
 
 RUN pyenv install 3.11
-#RUN pyenv install 3.12
+RUN pyenv install 3.12
 
-RUN pyenv global 3.11 3.8
+RUN pyenv global 3.12 3.11 3.10 3.9 3.8
 
 RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)')
-#RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)')
-#RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)')
+RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)')
+RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)')
 RUN ldd $(python3.11 -c 'import _sqlite3; print(_sqlite3.__file__)')
-#RUN ldd $(python3.12 -c 'import _sqlite3; print(_sqlite3.__file__)')
+RUN ldd $(python3.12 -c 'import _sqlite3; print(_sqlite3.__file__)')
 
 ENV PATH="/root/.cargo/bin:${PATH}"
 ENV RUST_BACKTRACE=1
 
-#RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-#    cargo install sccache
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    cargo install sccache
