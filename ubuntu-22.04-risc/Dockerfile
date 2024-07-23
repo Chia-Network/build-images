@@ -55,11 +55,12 @@ RUN pyenv install 3.12
 
 RUN pyenv global 3.12 3.11 3.10 3.9 3.8
 
-RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)')
-RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)')
-RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)')
-RUN ldd $(python3.11 -c 'import _sqlite3; print(_sqlite3.__file__)')
-RUN ldd $(python3.12 -c 'import _sqlite3; print(_sqlite3.__file__)')
+# make sure sqlite is loaded from the expected path
+RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
+RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
+RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
+RUN ldd $(python3.11 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
+RUN ldd $(python3.12 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 
 ENV PATH="/root/.cargo/bin:${PATH}"
 ENV RUST_BACKTRACE=1
