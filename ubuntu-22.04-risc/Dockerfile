@@ -41,12 +41,13 @@ RUN ls -la /usr/bin && \
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
-RUN curl https://pyenv.run | bash && \
+RUN tree /opt && \
+    curl https://pyenv.run | bash && \
     export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} --enable-shared" && \
-    export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} SQLITE3_LIBS='-L/opt/sqlite3/lib -lsqlite3'" && \
-    ls -la /opt/sqlite3/lib && \
-    export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} SQLITE3_CFLAGS='-I/opt/sqlite3/include'" && \
-    ls -la /opt/sqlite3/include && \
+    export LDFLAGS="$(PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig pkg-config --libs --define-variable=prefix=/opt/sqlite3 sqlite3)" && \
+    export CPPFLAGS="$(PKG_CONFIG_PATH=/opt/sqlite3/lib/pkgconfig pkg-config --cflags --define-variable=prefix=/opt/sqlite3 sqlite3)" && \
+    echo LDFLAGS="${LDFLAGS}" && \
+    echo CPPFLAGS="${CPPFLAGS}" && \
     pyenv install --skip-existing 3.8 && \
     pyenv install --skip-existing 3.9 && \
     pyenv install --skip-existing 3.10 && \
