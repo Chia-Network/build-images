@@ -42,14 +42,12 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 RUN curl https://pyenv.run | bash
 
 ARG PYTHON_CONFIGURE_OPTS="--enable-shared"
-
 ARG LDFLAGS="-Wl,-rpath,/opt/sqlite3/lib -L/opt/sqlite3/lib -lsqlite3"
 ARG CPPFLAGS="-I/opt/sqlite3/include"
 
 RUN pyenv install 3.8
 RUN pyenv install 3.9
 RUN pyenv install 3.10
-
 RUN pyenv install 3.11
 RUN pyenv install 3.12
 
