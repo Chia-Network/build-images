@@ -1,10 +1,10 @@
-FROM riscv64/ubuntu:focal as base
+FROM riscv64/ubuntu:focal AS base
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y tree build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
-FROM base as ld
+FROM base AS ld
 
 RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
     tar -xvzf binutils-2.38.tar.gz && \
@@ -15,7 +15,7 @@ RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
     tree /opt && \
     /opt/ld/bin/ld --version
 
-FROM base as sqlite
+FROM base AS sqlite
 
 RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tar -xvzf sqlite-autoconf-3400100.tar.gz && \
@@ -26,7 +26,7 @@ RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     tree /opt && \
     /opt/sqlite3/bin/sqlite3 -version
 
-FROM base as final
+FROM base AS final
 
 COPY --from=ld /opt/ld /usr
 
