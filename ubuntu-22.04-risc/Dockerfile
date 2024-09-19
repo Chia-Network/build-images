@@ -6,6 +6,7 @@ RUN apt-get update && \
 
 FROM base as ld
 
+# https://github.com/rust-lang/rust/issues/117101
 RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
     tar -xvzf binutils-2.38.tar.gz && \
     cd binutils-2.38 && \
