@@ -6,9 +6,9 @@ RUN apt-get update && \
 
 FROM base as ld
 
-RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
-    tar -xvzf binutils-2.38.tar.gz && \
-    cd binutils-2.38 && \
+RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.43.1.tar.gz && \
+    tar -xvzf binutils-2.43.1.tar.gz && \
+    cd binutils-2.43.1 && \
     ./configure --enable-ld --disable-gas --disable-gmp --disable-gold --disable-gprof --prefix=/opt/ld && \
     make && \
     make install && \
