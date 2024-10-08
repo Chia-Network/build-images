@@ -23,11 +23,10 @@ concurrency:
 jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
-    timeout-minutes: 240
     with:
       alternate-latest-mode: true
       runs-on: k8s-public
-      timeout-minutes: 1440
+      timeout-minutes: 240
       docker-context: "./ubuntu-22.04-risc"
       dockerfile: "./ubuntu-22.04-risc/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-22.04-risc-builder"
