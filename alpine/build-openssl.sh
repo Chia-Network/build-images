@@ -6,9 +6,9 @@ ln -s /usr/include/linux /usr/include/x86_64-linux-musl/linux
 
 mkdir /musl
 
-wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1w.tar.gz
-tar zxvf OpenSSL_1_1_1w.tar.gz 
-cd openssl-OpenSSL_1_1_1w/ || exit
+wget https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz
+tar zxvf openssl-3.0.15.tar.gz 
+cd openssl-3.0.15/ || exit
 
 CC="/usr/bin/x86_64-alpine-linux-musl-gcc -static" ./Configure no-shared no-async --prefix=/musl --openssldir=/musl/ssl linux-x86_64
 make depend

@@ -17,9 +17,9 @@ RUN yum -y groupinstall "Development Tools" && \
 
 # Compile newer version of sqlite3
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    wget -q https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
+    tar -xzf sqlite-autoconf-3450100.tar.gz && \
+    cd sqlite-autoconf-3450100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr/sqlite3 && \
     make && \
     make install && \
@@ -31,11 +31,11 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install 3.11 && \
+    pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
     yum clean all
 
 # Add nodejs

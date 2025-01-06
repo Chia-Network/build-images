@@ -47,9 +47,9 @@ RUN apt-get update && \
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    wget -q https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
+    tar -xzf sqlite-autoconf-3450100.tar.gz && \
+    cd sqlite-autoconf-3450100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
     make && \
     make install && \
@@ -58,11 +58,11 @@ RUN cd ~ && \
 
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install 3.11 && \
+    pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")'
 
 # Add nodejs
 ENV NODE_MAJOR=18

@@ -1,7 +1,7 @@
 FROM riscv64/ubuntu:focal AS base
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y tree build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y tree build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl3-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
 FROM base AS ld
@@ -18,9 +18,9 @@ RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
 
 FROM base AS sqlite
 
-RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xvzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+RUN curl -L -O https://sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
+    tar -xvzf sqlite-autoconf-3450100.tar.gz && \
+    cd sqlite-autoconf-3450100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/opt/sqlite3 && \
     make && \
     make install && \
