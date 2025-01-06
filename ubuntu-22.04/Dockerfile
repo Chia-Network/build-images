@@ -33,7 +33,7 @@ RUN apt-get update && \
         liblzma-dev \
         libncursesw5-dev \
         libreadline-dev \
-        libssl3-dev \
+        libssl-dev \
         libxml2-dev \
         libxmlsec1-dev \
         lsb-release \
