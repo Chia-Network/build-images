@@ -16,7 +16,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf -o rustup https://sh.rustup.rs
 RUN sh ./rustup -y
 
 RUN curl https://pyenv.run | bash && \
-    PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.8 && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.9 && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.10 && \
     PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install --skip-existing 3.11 && \
