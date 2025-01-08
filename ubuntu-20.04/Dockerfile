@@ -43,6 +43,7 @@ RUN apt-get update && \
         wget \
         xz-utils \
         zlib1g-dev && \
+        checkinstall && \
     rm -rf /var/lib/apt/lists/*
 
 # Compile newer version of sqlite3 \
@@ -56,13 +57,29 @@ RUN cd ~ && \
     cd ~ && \
     rm -rf ~/sqlite-autoconf*
 
+# Compile newer version of openssl \
+RUN cd ~ && \
+wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
+tar -xzf openssl-3.0.15.tar.gz && \
+cd openssl-3.0.15 && \
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib && \
+make && \
+make install && \
+cd ~ && \
+rm -rf ~/openssl-3.0.15*
+
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.11 && \
+    export LDFLAGS="-L/usr/local/openssl/lib" && \
+    export CPPFLAGS="-I/usr/local/openssl/include" && \
+    export PKG_CONFIG_PATH="/usr/local/openssl/lib/pkgconfig" && \
+    pyenv install 3.11 --with-openssl=/usr/local/openssl && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")'
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
+    python3 -c 'import sys; import ssl; sys.exit(ssl.OPENSSL_VERSION_INFO != (3,0,0,15,0))'
+
 
 # Add nodejs
 ENV NODE_MAJOR=18
