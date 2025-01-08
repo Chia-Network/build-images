@@ -58,7 +58,8 @@ RUN cd ~ && \
 
 # Set up pyenv
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.11 && \
+    export PYTHON_CONFIGURE_OPTS="--enable-shared --enable-optimizations" && \
+    pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \

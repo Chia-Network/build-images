@@ -26,16 +26,31 @@ RUN cd ~ && \
     cd ~ && \
     rm -rf ~/sqlite-autoconf*
 
+# Compile newer version of openssl \
+RUN cd ~ && \
+yum -y install perl-IPC-Cmd perl-Pod-Html && \
+wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
+tar -xzf openssl-3.0.15.tar.gz && \
+cd openssl-3.0.15 && \
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib && \
+make && \
+make install && \
+cd ~ && \
+rm -rf ~/openssl-3.0.15*
+
 # Compile newer version of python3
-RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
+RUN yum -y install zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
     cd ~ && \
     # Set up pyenv \
+    export LDFLAGS="-L/usr/local/ssl/lib64" && \
+    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=/usr/local/ssl/lib64 --enable-shared --enable-optimizations" && \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.11 && \
+    pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
     python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
+    python3 -c 'import sys; import ssl; sys.exit(ssl.OPENSSL_VERSION_INFO != (3,0,0,15,0))' && \
     yum clean all
 
 # Add nodejs
