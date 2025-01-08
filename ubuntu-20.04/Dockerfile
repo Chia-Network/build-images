@@ -62,7 +62,7 @@ RUN cd ~ && \
 wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
 tar -xzf openssl-3.0.15.tar.gz && \
 cd openssl-3.0.15 && \
-./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib && \
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib shared zlib && \
 make && \
 make install && \
 cd ~ && \
@@ -70,13 +70,7 @@ rm -rf ~/openssl-3.0.15*
 
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    if [ -d '/usr/local/ssl/lib64' ]; then \
-    export LDFLAGS="-L/usr/local/ssl/lib64" && \
-    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=/usr/local/ssl/lib64 --enable-shared --enable-optimizations"; \
-    else \
-    export LDFLAGS="-L/usr/local/ssl/lib" && \
-    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations"; \
-    fi && \
+    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" && \
     pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \

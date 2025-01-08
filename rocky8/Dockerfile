@@ -32,7 +32,7 @@ yum -y install perl-IPC-Cmd perl-Pod-Html && \
 wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
 tar -xzf openssl-3.0.15.tar.gz && \
 cd openssl-3.0.15 && \
-./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib && \
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib shared zlib && \
 make && \
 make install && \
 cd ~ && \
@@ -42,8 +42,7 @@ rm -rf ~/openssl-3.0.15*
 RUN yum -y install zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
     cd ~ && \
     # Set up pyenv \
-    export LDFLAGS="-L/usr/local/ssl/lib64" && \
-    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=/usr/local/ssl/lib64 --enable-shared --enable-optimizations" && \
+    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" && \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
