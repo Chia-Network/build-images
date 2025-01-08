@@ -73,7 +73,8 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     export LDFLAGS="-L/usr/local/openssl/lib" && \
     export CPPFLAGS="-I/usr/local/openssl/include" && \
     export PKG_CONFIG_PATH="/usr/local/openssl/lib/pkgconfig" && \
-    pyenv install 3.11 --with-openssl=/usr/local/openssl && \
+    export CONFIGURE_OPTS="--with-openssl=/usr/local/openssl" && \
+    pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
