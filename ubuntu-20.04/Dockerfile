@@ -42,7 +42,7 @@ RUN apt-get update && \
         vim \
         wget \
         xz-utils \
-        zlib1g-dev && \
+        zlib1g-dev \
         checkinstall && \
     rm -rf /var/lib/apt/lists/*
 
