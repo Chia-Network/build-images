@@ -70,8 +70,13 @@ rm -rf ~/openssl-3.0.15*
 
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
+    if [ -d '/usr/local/ssl/lib64' ]; then \
+    export LDFLAGS="-L/usr/local/ssl/lib64" && \
+    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=/usr/local/ssl/lib64 --enable-shared --enable-optimizations"; \
+    else \
     export LDFLAGS="-L/usr/local/ssl/lib" && \
-    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" && \
+    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations"; \
+    fi && \
     pyenv install 3.11 --verbose && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
