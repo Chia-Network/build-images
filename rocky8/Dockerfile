@@ -32,7 +32,7 @@ yum -y install perl-IPC-Cmd perl-Pod-Html && \
 wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
 tar -xzf openssl-3.0.15.tar.gz && \
 cd openssl-3.0.15 && \
-./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib shared zlib && \
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib no-ssl2 no-ssl3 no-idea no-weak-ssl-ciphers no-dtls no-dtls1 no-srp no-comp shared && \
 make && \
 make install && \
 cd ~ && \
