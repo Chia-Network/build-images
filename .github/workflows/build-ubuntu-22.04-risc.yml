@@ -22,8 +22,9 @@ concurrency:
 
 jobs:
   build:
-    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@qemu-cache-optional
     with:
+      enable-qemu-cache: false
       alternate-latest-mode: true
       runs-on: k8s-public
       timeout-minutes: 240
