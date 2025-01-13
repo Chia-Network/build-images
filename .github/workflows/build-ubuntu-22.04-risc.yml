@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build:
-    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@qemu-cache-optional
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
       enable-qemu-cache: false
       alternate-latest-mode: true
