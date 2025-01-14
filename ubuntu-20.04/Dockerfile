@@ -42,42 +42,27 @@ RUN apt-get update && \
         vim \
         wget \
         xz-utils \
-        zlib1g-dev \
-        checkinstall && \
+        zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
-    wget -q https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
-    tar -xzf sqlite-autoconf-3450100.tar.gz && \
-    cd sqlite-autoconf-3450100 && \
+    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
+    tar -xzf sqlite-autoconf-3400100.tar.gz && \
+    cd sqlite-autoconf-3400100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
     make && \
     make install && \
     cd ~ && \
     rm -rf ~/sqlite-autoconf*
 
-# Compile newer version of openssl \
-RUN cd ~ && \
-wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
-tar -xzf openssl-3.0.15.tar.gz && \
-cd openssl-3.0.15 && \
-./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib no-ssl3 no-idea no-dtls no-srp no-comp shared && \
-make && \
-make install && \
-cd ~ && \
-rm -rf ~/openssl-3.0.15*
-
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    export PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" && \
-    pyenv install 3.11 --verbose && \
-    pyenv global 3.11 && \
+    pyenv install 3.10 && \
+    pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
-    python3 -c 'import sys; import ssl; sys.exit(ssl.OPENSSL_VERSION_INFO != (3,0,0,15,0))'
-
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
 
 # Add nodejs
 ENV NODE_MAJOR=18

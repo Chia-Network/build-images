@@ -18,9 +18,9 @@ RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
 
 FROM base AS sqlite
 
-RUN curl -L -O https://sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
-    tar -xvzf sqlite-autoconf-3450100.tar.gz && \
-    cd sqlite-autoconf-3450100 && \
+RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
+    tar -xvzf sqlite-autoconf-3400100.tar.gz && \
+    cd sqlite-autoconf-3400100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/opt/sqlite3 && \
     make && \
     make install && \
@@ -55,6 +55,7 @@ RUN pyenv install 3.13
 RUN pyenv global 3.13 3.12 3.11 3.10 3.9
 
 # make sure sqlite is loaded from the expected path
+RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.11 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
