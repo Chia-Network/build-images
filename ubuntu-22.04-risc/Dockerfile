@@ -55,7 +55,6 @@ RUN pyenv install 3.13
 RUN pyenv global 3.13 3.12 3.11 3.10 3.9
 
 # make sure sqlite is loaded from the expected path
-RUN ldd $(python3.8 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.9 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.10 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
 RUN ldd $(python3.11 -c 'import _sqlite3; print(_sqlite3.__file__)') | grep /opt/sqlite3/lib/
