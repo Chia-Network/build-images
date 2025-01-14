@@ -18,9 +18,9 @@ RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
 
 FROM base AS sqlite
 
-RUN curl -L -O https://sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
-    tar -xvzf sqlite-autoconf-3450100.tar.gz && \
-    cd sqlite-autoconf-3450100 && \
+RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
+    tar -xvzf sqlite-autoconf-3400100.tar.gz && \
+    cd sqlite-autoconf-3400100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/opt/sqlite3 && \
     make && \
     make install && \
