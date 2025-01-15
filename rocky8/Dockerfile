@@ -17,25 +17,44 @@ RUN yum -y groupinstall "Development Tools" && \
 
 # Compile newer version of sqlite3
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    wget -q https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && \
+    tar -xzf sqlite-autoconf-3450100.tar.gz && \
+    cd sqlite-autoconf-3450100 && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr/sqlite3 && \
     make && \
     make install && \
     cd ~ && \
     rm -rf ~/sqlite-autoconf*
 
+RUN cd ~ && \
+    yum -y install perl-IPC-Cmd perl-Pod-Html && \
+    wget -q https://github.com/openssl/openssl/releases/download/openssl-3.0.15/openssl-3.0.15.tar.gz && \
+    tar -xzf openssl-3.0.15.tar.gz && \
+    cd openssl-3.0.15 && \
+    ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl --libdir=lib no-ssl3 no-idea no-dtls no-srp no-comp shared && \
+    make && \
+    make install && \
+    cd ~ && \
+    rm -rf ~/openssl-3.0.15*
+
 # Compile newer version of python3
 RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
+    # setup python 3.10 \
+    PYTHON_CONFIGURE_OPTS="--enable-shared --enable-optimizations" pyenv install 3.10 && \
+    # setup python 3.11 w/ openssl 3 \
+    PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" pyenv install 3.11 && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
+    pyenv global 3.11 && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir py3createtorrent awscli && \
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.45.1")' && \
+    python3 -c 'import sys; import ssl; sys.exit(ssl.OPENSSL_VERSION_INFO != (3,0,0,15,0))' && \
     yum clean all
 
 # Add nodejs
