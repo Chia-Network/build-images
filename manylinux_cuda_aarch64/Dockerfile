@@ -1,6 +1,6 @@
-FROM quay.io/pypa/manylinux_2_28_aarch64
+FROM quay.io/pypa/manylinux_2_34_aarch64
 
-ENV PATH=/usr/local/cuda-12.5/bin${PATH:+:${PATH}}
+ENV PATH=/usr/local/cuda-12.8/bin${PATH:+:${PATH}}
 
 RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     dnf install -y kernel-headers.aarch64 kernel-devel.aarch64 && \
