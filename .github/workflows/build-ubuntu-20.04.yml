@@ -24,6 +24,7 @@ jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
+      runs-on: ubuntu-22.04
       alternate-latest-mode: true
       docker-context: "./ubuntu-20.04"
       dockerfile: "./ubuntu-20.04/Dockerfile"
