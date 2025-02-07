@@ -1,4 +1,4 @@
-FROM quay.io/pypa/manylinux_2_34_aarch64
+FROM quay.io/pypa/manylinux_2_28_aarch64
 
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 
