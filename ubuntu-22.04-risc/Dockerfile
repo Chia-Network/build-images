@@ -50,8 +50,7 @@ RUN pyenv install 3.9
 RUN pyenv install 3.10
 RUN pyenv install 3.11
 RUN pyenv install 3.12
-# enable-optimizations seems to cause compiler error and crash
-RUN PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.13
+RUN pyenv install 3.13
 
 RUN pyenv global 3.13 3.12 3.11 3.10 3.9
 
