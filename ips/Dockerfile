@@ -1,6 +1,6 @@
-FROM registry.gitlab.com/cmmarslender/kubectl-helm:v3 as kubectl-helm
-FROM hashicorp/packer:latest as packer
-FROM hashicorp/terraform:latest as terraform
+FROM registry.gitlab.com/cmmarslender/kubectl-helm:v3 AS kubectl-helm
+FROM hashicorp/packer:latest AS packer
+FROM hashicorp/terraform:latest AS terraform
 FROM alpine:latest
 
 ENV PACKER_PLUGIN_PATH="/packer-plugins"
