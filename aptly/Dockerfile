@@ -1,6 +1,6 @@
 FROM golang:1 as builder
 
-RUN git clone --branch v1.6.0 https://github.com/aptly-dev/aptly.git && \
+RUN git clone --branch v1.6.1 https://github.com/aptly-dev/aptly.git && \
     cd aptly && \
     make build
 
