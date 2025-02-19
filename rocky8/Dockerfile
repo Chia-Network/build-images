@@ -51,8 +51,12 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     pip install --no-cache-dir py3createtorrent awscli && \
     python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
     pyenv global 3.11 && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir py3createtorrent awscli && \
     python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
     python3 -c 'import sys; import ssl; sys.exit(ssl.OPENSSL_VERSION_INFO != (3,0,0,15,0))' && \
+    # Set the default to 3.10
+    pyenv global 3.10 && \
     yum clean all
 
 # Add nodejs
