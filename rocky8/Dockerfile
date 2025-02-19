@@ -44,12 +44,12 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     # setup python 3.10 \
     pyenv install 3.10 && \
-    # setup python 3.11 w/ openssl 3 \
-    PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" pyenv install 3.11 && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
     python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    # setup python 3.11 w/ openssl 3 \
+    PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" pyenv install 3.11 && \
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \

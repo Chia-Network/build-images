@@ -70,11 +70,12 @@ RUN cd ~ && \
 # Set up pyenv
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     pyenv install 3.10 && \
-    PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" pyenv install 3.11 && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
     python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    PYTHON_CONFIGURE_OPTS="--with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-shared --enable-optimizations" pyenv install 3.11 && \
+    # setup python 3.11
     pyenv global 3.11 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
