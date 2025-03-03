@@ -38,6 +38,7 @@ RUN apt-get update && \
         libxmlsec1-dev \
         lsb-release \
         sudo \
+        time \
         tk-dev \
         vim \
         wget \
