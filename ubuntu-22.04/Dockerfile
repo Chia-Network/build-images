@@ -15,7 +15,6 @@ RUN apt-get update && \
         gpg \
         gpg-agent \
         software-properties-common && \
-    add-apt-repository ppa:git-core/ppa -y && \
     add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         awscli \
