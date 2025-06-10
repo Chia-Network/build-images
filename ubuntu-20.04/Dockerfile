@@ -59,6 +59,8 @@ RUN cd ~ && \
 # Set up pyenv \
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     pyenv install 3.10 && \
+    pyenv install 3.11 && \
+    pyenv install 3.12 && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
