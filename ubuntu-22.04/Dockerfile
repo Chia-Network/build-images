@@ -36,6 +36,8 @@ RUN apt-get update && \
         libxml2-dev \
         libxmlsec1-dev \
         lsb-release \
+        ruby \
+        ruby-dev \
         sudo \
         time \
         tk-dev \
