@@ -36,6 +36,9 @@ RUN apt-get update && \
         libxml2-dev \
         libxmlsec1-dev \
         lsb-release \
+        # electron-builder does not work for arm64 as of Aug 16, 2022.
+        # this is a "temporary" fix.  for three plus years.
+        # https://github.com/jordansissel/fpm/issues/1801#issuecomment-919877499
         ruby \
         ruby-dev \
         sudo \
