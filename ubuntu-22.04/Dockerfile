@@ -49,7 +49,8 @@ RUN apt-get update && \
 # this is a "temporary" fix.  for three plus years.
 # https://github.com/jordansissel/fpm/issues/1801#issuecomment-919877499
 # located here for https://github.com/Chia-Network/chia-blockchain/pull/20037
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         ruby \
         ruby-dev && \
     rm -rf /var/lib/apt/lists/* && \
