@@ -36,11 +36,6 @@ RUN apt-get update && \
         libxml2-dev \
         libxmlsec1-dev \
         lsb-release \
-        # electron-builder does not work for arm64 as of Aug 16, 2022.
-        # this is a "temporary" fix.  for three plus years.
-        # https://github.com/jordansissel/fpm/issues/1801#issuecomment-919877499
-        ruby \
-        ruby-dev \
         sudo \
         time \
         tk-dev \
@@ -49,6 +44,19 @@ RUN apt-get update && \
         xz-utils \
         zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
+
+# electron-builder does not work for arm64 as of Aug 16, 2022.
+# this is a "temporary" fix.  for three plus years.
+# https://github.com/jordansissel/fpm/issues/1801#issuecomment-919877499
+# located here for https://github.com/Chia-Network/chia-blockchain/pull/20037
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
+        ruby \
+        ruby-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    sudo gem install fpm && \
+    rm -rf /gems/cache/*.gem && \
+    find /gems/gems/ -name "*.c" -delete && \
+    find /gems/gems/ -name "*.o" -delete
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
