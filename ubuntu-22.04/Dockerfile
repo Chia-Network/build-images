@@ -55,9 +55,10 @@ RUN apt-get update && \
         ruby-dev && \
     rm -rf /var/lib/apt/lists/* && \
     sudo gem install fpm && \
-    rm -rf /gems/cache/*.gem && \
-    find /gems/gems/ -name "*.c" -delete && \
-    find /gems/gems/ -name "*.o" -delete
+    gem cleanup && \
+    rm -rf $(gem environment cachedir)/*.gem && \
+    find $(gem environment gemdir) -name "*.c" -delete && \
+    find $(gem environment gemdir) -name "*.o" -delete
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
