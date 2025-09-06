@@ -77,7 +77,16 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
     pyenv global 3.10 && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    # setup python 3.11
+    PYTHON_CONFIGURE_OPTS="--enable-shared --enable-optimizations" pyenv install 3.11 && \
+    pyenv global 3.11 && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir py3createtorrent && \
+    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    # Set the default to 3.10
+    pyenv global 3.10
+
 
 # Add nodejs
 ENV NODE_MAJOR=18
