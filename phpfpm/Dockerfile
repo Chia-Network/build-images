@@ -29,7 +29,8 @@ RUN apt-get update \
         zip \
     && apt-get remove -y build-essential libz-dev libmemcached-dev libssl-dev \
     && apt-get autoremove -y \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
