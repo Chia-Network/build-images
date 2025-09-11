@@ -22,7 +22,14 @@ concurrency:
 
 jobs:
   build:
-    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@less_docker_qemu
+    strategy:
+      matrix:
+        arch:
+          - runs-on: ubuntu-24.04
+            docker-platform: "linux/amd64"
+          - runs-on: ubuntu-24.04-arm
+            docker-platform: "linux/arm64"
     with:
       runs-on: ubuntu-22.04
       alternate-latest-mode: true
@@ -30,6 +37,8 @@ jobs:
       dockerfile: "./ubuntu-20.04/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-20.04-builder"
       image_subpath: "ubuntu-20.04-builder"
+      docker-platforms: ${{ matrix.arch.docker-platform }}
+      runs-on: ${{ matrix.arch.runs-on }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
