@@ -44,3 +44,4 @@ jobs:
       build-args: |
         WORDPRESS_VERSION="${{ needs.get_version.outputs.WP_VERSION }}"
       additional-tag: ${{ needs.get_version.outputs.WP_VERSION }}
+      push: ${{ github.event_name != 'pull_request' }}

@@ -29,6 +29,7 @@ jobs:
       dockerfile: "./ubuntu-18.04/Dockerfile"
       dockerhub_imagename: "chianetwork/ubuntu-18.04-builder"
       image_subpath: "ubuntu-18.04-builder"
+      push: ${{ github.event_name != 'pull_request' }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}

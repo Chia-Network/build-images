@@ -28,3 +28,4 @@ jobs:
       docker-context: "./db-webroot-backup"
       dockerfile: "./db-webroot-backup/Dockerfile"
       image_subpath: "db-webroot-backup"
+      push: ${{ github.event_name != 'pull_request' }}

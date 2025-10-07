@@ -28,3 +28,4 @@ jobs:
       docker-context: "./ips"
       dockerfile: "./ips/Dockerfile"
       image_subpath: "ips"
+      push: ${{ github.event_name != 'pull_request' }}
