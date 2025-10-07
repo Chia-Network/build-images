@@ -29,3 +29,4 @@ jobs:
       docker-context: "./phpfpm"
       dockerfile: "./phpfpm/Dockerfile"
       image_subpath: "phpfpm"
+      push: ${{ github.event_name != 'pull_request' }}

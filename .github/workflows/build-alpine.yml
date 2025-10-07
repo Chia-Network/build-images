@@ -30,6 +30,7 @@ jobs:
       dockerfile: "./alpine/Dockerfile"
       dockerhub_imagename: "chianetwork/alpine-builder"
       image_subpath: "alpine-builder"
+      push: ${{ github.event_name != 'pull_request' }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}

@@ -29,6 +29,7 @@ jobs:
       dockerfile: "./aptly/Dockerfile"
       dockerhub_imagename: "chianetwork/aptly"
       image_subpath: "aptly"
+      push: ${{ github.event_name != 'pull_request' }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
