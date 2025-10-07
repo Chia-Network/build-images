@@ -66,9 +66,10 @@ RUN apt-get update && \
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    SQLITE_NUM=$(echo "$SQLITE_VERSION" | awk -F. '{printf "%d%02d%02d00", $1, $2, $3}') && \
+    wget -q "https://sqlite.org/2022/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    tar -xzf "sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    cd "sqlite-autoconf-${SQLITE_NUM}" && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
     make && \
     make install && \
