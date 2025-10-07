@@ -8,6 +8,10 @@ ENV LIBRARY_PATH="/usr/sqlite3/lib"
 ENV LD_LIBRARY_PATH="/usr/sqlite3/lib"
 ENV NVM_DIR="/root/.nvm"
 
+ARG PYTHON_VERSION
+ARG SQLITE_VERSION
+ENV EXPECTED_SQLITE_VERSION=$SQLITE_VERSION
+
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
     yum -y install ca-certificates createrepo dnf epel-release git procps rpm-build squashfs-tools vim wget && \
@@ -31,11 +35,11 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install $PYTHON_VERSION && \
+    pyenv global $PYTHON_VERSION && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    python3 -c 'import sys, sqlite3, os; sys.exit(sqlite3.sqlite_version != os.environ["EXPECTED_SQLITE_VERSION"])' && \
     yum clean all
 
 # Add nodejs

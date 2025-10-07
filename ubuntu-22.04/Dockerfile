@@ -7,6 +7,10 @@ ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/lib"
 
+ARG PYTHON_VERSION
+ARG SQLITE_VERSION
+ENV EXPECTED_SQLITE_VERSION=$SQLITE_VERSION
+
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 
 RUN apt-get update && \
@@ -73,11 +77,11 @@ RUN cd ~ && \
 
 # Set up pyenv
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install $PYTHON_VERSION && \
+    pyenv global $PYTHON_VERSION && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
+    python3 -c 'import sys, sqlite3, os; sys.exit(sqlite3.sqlite_version != os.environ["EXPECTED_SQLITE_VERSION"])'
 
 # Add nodejs
 ENV NODE_MAJOR=18
