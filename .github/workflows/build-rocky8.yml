@@ -26,8 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - name: "latest"
-            build-args: |
+          - build-args: |
               PYTHON_VERSION=3.10
               SQLITE_VERSION=3.40.1
           - name: "python312"
@@ -36,12 +35,13 @@ jobs:
               SQLITE_VERSION=3.49.1
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
-      alternate-latest-mode: ${{ matrix.tag.name == 'latest' }}
+      alternate-latest-mode: ${{ matrix.tag.name == '' }}
       docker-context: "./rocky8"
       dockerfile: "./rocky8/Dockerfile"
       dockerhub_imagename: "chianetwork/rocky8-builder"
       image_subpath: "rocky8-builder"
       build-args: ${{ matrix.tag.build-args }}
+      additional-tag: ${{ matrix.tag.name }}
       push: ${{ github.event_name != 'pull_request' }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
