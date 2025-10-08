@@ -41,6 +41,7 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     pyenv global $PYTHON_VERSION && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
+    python3 -c 'import sqlite3; print(sqlite3.sqlite_version)' && \
     python3 -c 'import sys, sqlite3, os; sys.exit(sqlite3.sqlite_version != os.environ["EXPECTED_SQLITE_VERSION"])' && \
     yum clean all
 
