@@ -23,27 +23,17 @@ RUN yum -y groupinstall "Development Tools" && \
 # Compile newer version of sqlite3
 RUN cd ~ && \
     SQLITE_NUM=$(echo "$SQLITE_VERSION" | awk -F. '{printf "%d%02d%02d00", $1, $2, $3}') && \
-    echo $SQLITE_NUM && \
-    echo "https://sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
     wget -q "https://sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
-    echo "here" && \
     tar -xzf "sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
-    echo "here2" && \
     cd "sqlite-autoconf-${SQLITE_NUM}" && \
-    echo "here3" && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr/sqlite3 && \
-    echo "here4" && \
     make && \
-    echo "here5" && \
     make install && \
-    echo "here6" && \
     cd ~ && \
-    echo "here7" && \
     rm -rf ~/sqlite-autoconf* && \
-    echo "here8"
 
-# Compile newer version of python3
-RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
+    # Compile newer version of python3
+    RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
