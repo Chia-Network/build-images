@@ -30,10 +30,10 @@ RUN cd ~ && \
     make && \
     make install && \
     cd ~ && \
-    rm -rf ~/sqlite-autoconf* && \
+    rm -rf ~/sqlite-autoconf*
 
-    # Compile newer version of python3
-    RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
+# Compile newer version of python3
+RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-devel tk-devel libffi-devel xz-devel && \
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
