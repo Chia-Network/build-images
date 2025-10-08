@@ -9,6 +9,7 @@ ENV LD_LIBRARY_PATH="/usr/sqlite3/lib"
 ENV NVM_DIR="/root/.nvm"
 
 ARG PYTHON_VERSION
+ARG SQLITE_RELEASE_YEAR
 ARG SQLITE_VERSION
 ENV EXPECTED_SQLITE_VERSION=$SQLITE_VERSION
 
@@ -23,8 +24,8 @@ RUN yum -y groupinstall "Development Tools" && \
 RUN cd ~ && \
     SQLITE_NUM=$(echo "$SQLITE_VERSION" | awk -F. '{printf "%d%02d%02d00", $1, $2, $3}') && \
     echo $SQLITE_NUM && \
-    echo "https://sqlite.org/2022/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
-    wget -q "https://sqlite.org/2022/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    echo "https://sqlite.org/${SQLITE_RELEASE_YEAR}}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    wget -q "https://sqlite.org/${SQLITE_RELEASE_YEAR}}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
     echo "here" && \
     tar -xzf "sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
     echo "here2" && \

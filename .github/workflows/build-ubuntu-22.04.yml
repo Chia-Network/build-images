@@ -28,10 +28,12 @@ jobs:
         tag:
           - build-args: |
               PYTHON_VERSION=3.10
+              SQLITE_RELEASE_YEAR=2022
               SQLITE_VERSION=3.40.1
           - name: "python312"
             build-args: |
               PYTHON_VERSION=3.12
+              SQLITE_RELEASE_YEAR=2025
               SQLITE_VERSION=3.49.1
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
