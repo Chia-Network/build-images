@@ -8,6 +8,11 @@ ENV LIBRARY_PATH="/usr/sqlite3/lib"
 ENV LD_LIBRARY_PATH="/usr/sqlite3/lib"
 ENV NVM_DIR="/root/.nvm"
 
+ARG PYTHON_VERSION
+ARG SQLITE_RELEASE_YEAR
+ARG SQLITE_VERSION
+ENV EXPECTED_SQLITE_VERSION=$SQLITE_VERSION
+
 # General Deps
 RUN yum -y groupinstall "Development Tools" && \
     yum -y install ca-certificates createrepo dnf epel-release git procps rpm-build squashfs-tools vim wget && \
@@ -17,9 +22,10 @@ RUN yum -y groupinstall "Development Tools" && \
 
 # Compile newer version of sqlite3
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    SQLITE_NUM=$(echo "$SQLITE_VERSION" | awk -F. '{printf "%d%02d%02d00", $1, $2, $3}') && \
+    wget -q "https://sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    tar -xzf "sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    cd "sqlite-autoconf-${SQLITE_NUM}" && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr/sqlite3 && \
     make && \
     make install && \
@@ -31,11 +37,11 @@ RUN yum -y install openssl openssl-devel zlib-devel bzip2 bzip2-devel readline-d
     cd ~ && \
     # Set up pyenv \
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install $PYTHON_VERSION && \
+    pyenv global $PYTHON_VERSION && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent awscli && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")' && \
+    python3 -c 'import sys, sqlite3, os; sys.exit(sqlite3.sqlite_version != os.environ["EXPECTED_SQLITE_VERSION"])' && \
     yum clean all
 
 # Add nodejs

@@ -7,42 +7,47 @@ ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/lib"
 
+ARG PYTHON_VERSION
+ARG SQLITE_RELEASE_YEAR
+ARG SQLITE_VERSION
+ENV EXPECTED_SQLITE_VERSION=$SQLITE_VERSION
+
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
-        apt-utils \
-        gpg \
-        gpg-agent \
-        software-properties-common && \
+    apt-utils \
+    gpg \
+    gpg-agent \
+    software-properties-common && \
     add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
-        awscli \
-        build-essential \
-        ca-certificates \
-        curl \
-        dialog \
-        fakeroot \
-        g++-12 \
-        g++-13 \
-        git \
-        jq \
-        libbz2-dev \
-        libffi-dev \
-        liblzma-dev \
-        libncursesw5-dev \
-        libreadline-dev \
-        libssl-dev \
-        libxml2-dev \
-        libxmlsec1-dev \
-        lsb-release \
-        sudo \
-        time \
-        tk-dev \
-        vim \
-        wget \
-        xz-utils \
-        zlib1g-dev && \
+    awscli \
+    build-essential \
+    ca-certificates \
+    curl \
+    dialog \
+    fakeroot \
+    g++-12 \
+    g++-13 \
+    git \
+    jq \
+    libbz2-dev \
+    libffi-dev \
+    liblzma-dev \
+    libncursesw5-dev \
+    libreadline-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    lsb-release \
+    sudo \
+    time \
+    tk-dev \
+    vim \
+    wget \
+    xz-utils \
+    zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # electron-builder does not work for arm64 as of Aug 16, 2022.
@@ -51,8 +56,8 @@ RUN apt-get update && \
 # located here for https://github.com/Chia-Network/chia-blockchain/pull/20037
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
-        ruby \
-        ruby-dev && \
+    ruby \
+    ruby-dev && \
     rm -rf /var/lib/apt/lists/* && \
     sudo gem install fpm && \
     gem cleanup && \
@@ -62,9 +67,10 @@ RUN apt-get update && \
 
 # Compile newer version of sqlite3 \
 RUN cd ~ && \
-    wget -q https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
-    tar -xzf sqlite-autoconf-3400100.tar.gz && \
-    cd sqlite-autoconf-3400100 && \
+    SQLITE_NUM=$(echo "$SQLITE_VERSION" | awk -F. '{printf "%d%02d%02d00", $1, $2, $3}') && \
+    wget -q "https://sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    tar -xzf "sqlite-autoconf-${SQLITE_NUM}.tar.gz" && \
+    cd "sqlite-autoconf-${SQLITE_NUM}" && \
     CFLAGS="-DSQLITE_MAX_VARIABLE_NUMBER=500000" ./configure --prefix=/usr && \
     make && \
     make install && \
@@ -73,11 +79,11 @@ RUN cd ~ && \
 
 # Set up pyenv
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
-    pyenv install 3.10 && \
-    pyenv global 3.10 && \
+    pyenv install $PYTHON_VERSION && \
+    pyenv global $PYTHON_VERSION && \
     pip install --upgrade pip && \
     pip install --no-cache-dir py3createtorrent && \
-    python3 -c 'import sys; import sqlite3; sys.exit(sqlite3.sqlite_version != "3.40.1")'
+    python3 -c 'import sys, sqlite3, os; sys.exit(sqlite3.sqlite_version != os.environ["EXPECTED_SQLITE_VERSION"])'
 
 # Add nodejs
 ENV NODE_MAJOR=18
