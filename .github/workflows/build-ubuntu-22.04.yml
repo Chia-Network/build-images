@@ -44,6 +44,7 @@ jobs:
       image_subpath: "ubuntu-22.04-builder"
       build-args: ${{ matrix.tag.build-args }}
       additional-tag: ${{ matrix.tag.name }}
+      push: ${{ github.event_name != 'pull_request' }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
