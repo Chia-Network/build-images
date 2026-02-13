@@ -4,18 +4,6 @@ RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y tree build-essential cmake curl wget git make pkg-config libgmp-dev libboost-dev libssl-dev zlib1g zlib1g-dev libreadline-dev libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
-FROM base AS ld
-
-# https://github.com/rust-lang/rust/issues/117101
-RUN curl -L -O https://ftpmirror.gnu.org/gnu/binutils/binutils-2.38.tar.gz && \
-    tar -xvzf binutils-2.38.tar.gz && \
-    cd binutils-2.38 && \
-    ./configure --enable-ld --disable-gas --disable-gmp --disable-gold --disable-gprof --prefix=/opt/ld && \
-    make && \
-    make install && \
-    tree /opt && \
-    /opt/ld/bin/ld --version
-
 FROM base AS sqlite
 
 RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
@@ -28,8 +16,6 @@ RUN curl -L -O https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz && \
     /opt/sqlite3/bin/sqlite3 -version
 
 FROM base AS final
-
-COPY --from=ld /opt/ld /usr
 
 COPY --from=sqlite /opt/sqlite3 /opt/sqlite3
 
