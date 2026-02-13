@@ -1,0 +1,46 @@
+name: Build Ubuntu 24.04 Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "ubuntu-24.04/*"
+      - ".github/workflows/build-ubuntu-24.04.yml"
+  pull_request:
+    paths:
+      - "ubuntu-24.04/*"
+      - ".github/workflows/build-ubuntu-24.04.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "30 12 * * 5"
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        tag:
+          - name: "python312"
+            build-args: |
+              PYTHON_VERSION=3.12
+              SQLITE_RELEASE_YEAR=2026
+              SQLITE_VERSION=3.51.2
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      alternate-latest-mode: ${{ matrix.tag.name == '' }}
+      docker-context: "./ubuntu-24.04"
+      dockerfile: "./ubuntu-24.04/Dockerfile"
+      dockerhub_imagename: "chianetwork/ubuntu-24.04-builder"
+      image_subpath: "ubuntu-24.04-builder"
+      build-args: ${{ matrix.tag.build-args }}
+      additional-tag: ${{ matrix.tag.name }}
+      push: ${{ github.event_name != 'pull_request' }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
