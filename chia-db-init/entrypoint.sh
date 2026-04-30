@@ -27,10 +27,6 @@ get_local_height() {
     echo "$local_height"
 }
 
-check_cache_files() {
-    [ -f "${DB_DIR}/height-to-hash" ] && [ -f "${DB_DIR}/sub-epoch-summaries" ]
-}
-
 delete_db_files() {
     echo "Removing existing DB and cache files..."
     rm -f "$DB_PATH" "${DB_PATH}-shm" "${DB_PATH}-wal"
@@ -38,11 +34,11 @@ delete_db_files() {
     rm -f "${DB_DIR}/sub-epoch-summaries"
 }
 
-download_from_s3() {
+download_db_from_s3() {
     mkdir -p "$DB_DIR"
 
     echo "Downloading blockchain DB from S3..."
-    if aws s3 ls "${S3_PREFIX}/${DB_FILE}.gz" --region "$AWS_REGION" >/dev/null 2>&1; then
+    if aws s3api head-object --bucket "$S3_BUCKET" --key "${NETWORK}/${DB_FILE}.gz" --region "$AWS_REGION" >/dev/null 2>&1; then
         echo "Found gzipped DB, downloading ${DB_FILE}.gz..."
         aws s3 cp "${S3_PREFIX}/${DB_FILE}.gz" "${DB_PATH}.gz" --region "$AWS_REGION"
         echo "Decompressing ${DB_FILE}.gz..."
@@ -51,14 +47,20 @@ download_from_s3() {
         echo "No gzipped DB found, downloading uncompressed ${DB_FILE}..."
         aws s3 cp "${S3_PREFIX}/${DB_FILE}" "$DB_PATH" --region "$AWS_REGION"
     fi
+}
 
-    echo "Downloading height-to-hash..."
-    aws s3 cp "${S3_PREFIX}/height-to-hash" "${DB_DIR}/height-to-hash" --region "$AWS_REGION"
+download_cache_files() {
+    mkdir -p "$DB_DIR"
 
-    echo "Downloading sub-epoch-summaries..."
-    aws s3 cp "${S3_PREFIX}/sub-epoch-summaries" "${DB_DIR}/sub-epoch-summaries" --region "$AWS_REGION"
+    if [ ! -f "${DB_DIR}/height-to-hash" ]; then
+        echo "Downloading height-to-hash..."
+        aws s3 cp "${S3_PREFIX}/height-to-hash" "${DB_DIR}/height-to-hash" --region "$AWS_REGION"
+    fi
 
-    echo "S3 download complete"
+    if [ ! -f "${DB_DIR}/sub-epoch-summaries" ]; then
+        echo "Downloading sub-epoch-summaries..."
+        aws s3 cp "${S3_PREFIX}/sub-epoch-summaries" "${DB_DIR}/sub-epoch-summaries" --region "$AWS_REGION"
+    fi
 }
 
 echo "=== Chia DB Init ==="
@@ -76,21 +78,19 @@ if [ -f "$DB_PATH" ]; then
     local_height=$(get_local_height)
     echo "Local block height: ${local_height}"
 
-    if [ "$local_height" -ge "$MIN_HEIGHT" ] && check_cache_files; then
-        echo "Local DB has sufficient blocks (${local_height} >= ${MIN_HEIGHT}) and cache files present, no action needed"
+    if [ "$local_height" -ge "$MIN_HEIGHT" ]; then
+        echo "Local DB has sufficient blocks (${local_height} >= ${MIN_HEIGHT})"
+        download_cache_files
         echo "Done"
         exit 0
     fi
 
-    if [ "$local_height" -lt "$MIN_HEIGHT" ]; then
-        echo "Local height ${local_height} is below minimum ${MIN_HEIGHT}, re-downloading..."
-    else
-        echo "Cache files missing, re-downloading..."
-    fi
+    echo "Local height ${local_height} is below minimum ${MIN_HEIGHT}, re-downloading..."
     delete_db_files
 else
     echo "No existing DB found at ${DB_PATH}"
 fi
 
-download_from_s3
+download_db_from_s3
+download_cache_files
 echo "Done"
