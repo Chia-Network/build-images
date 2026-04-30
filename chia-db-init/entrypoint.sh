@@ -17,14 +17,18 @@ DB_PATH="${DB_DIR}/${DB_FILE}"
 S3_PREFIX="s3://${S3_BUCKET}/${NETWORK}"
 
 get_local_height() {
-    local_height=$(sqlite3 "$DB_PATH" "SELECT MAX(height) FROM full_blocks;" 2>/dev/null)
+    local_height=$(sqlite3 "$DB_PATH" "SELECT MAX(height) FROM full_blocks;" 2>/dev/null || echo "")
 
-    if [ -z "$local_height" ] || [ "$local_height" = "" ]; then
+    if [ -z "$local_height" ]; then
         echo "0"
         return
     fi
 
     echo "$local_height"
+}
+
+check_cache_files() {
+    [ -f "${DB_DIR}/height-to-hash" ] && [ -f "${DB_DIR}/sub-epoch-summaries" ]
 }
 
 delete_db_files() {
@@ -72,13 +76,17 @@ if [ -f "$DB_PATH" ]; then
     local_height=$(get_local_height)
     echo "Local block height: ${local_height}"
 
-    if [ "$local_height" -ge "$MIN_HEIGHT" ]; then
-        echo "Local DB has sufficient blocks (${local_height} >= ${MIN_HEIGHT}), no action needed"
+    if [ "$local_height" -ge "$MIN_HEIGHT" ] && check_cache_files; then
+        echo "Local DB has sufficient blocks (${local_height} >= ${MIN_HEIGHT}) and cache files present, no action needed"
         echo "Done"
         exit 0
     fi
 
-    echo "Local height ${local_height} is below minimum ${MIN_HEIGHT}, re-downloading..."
+    if [ "$local_height" -lt "$MIN_HEIGHT" ]; then
+        echo "Local height ${local_height} is below minimum ${MIN_HEIGHT}, re-downloading..."
+    else
+        echo "Cache files missing, re-downloading..."
+    fi
     delete_db_files
 else
     echo "No existing DB found at ${DB_PATH}"

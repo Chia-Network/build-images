@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache aws-cli sqlite curl jq gzip
+RUN apk add --no-cache aws-cli sqlite gzip
 
 COPY entrypoint.sh /entrypoint.sh
 
