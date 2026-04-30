@@ -1,0 +1,31 @@
+name: Build Chia DB Init Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'chia-db-init/*'
+      - '.github/workflows/build-chia-db-init.yml'
+  pull_request:
+    paths:
+      - 'chia-db-init/*'
+      - '.github/workflows/build-chia-db-init.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      alternate-latest-mode: true
+      docker-context: "./chia-db-init"
+      dockerfile: "./chia-db-init/Dockerfile"
+      image_subpath: "chia-db-init"
+      push: ${{ github.event_name != 'pull_request' }}
