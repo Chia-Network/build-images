@@ -16,8 +16,11 @@ DB_FILE="blockchain_v2_${NETWORK}.sqlite"
 DB_PATH="${DB_DIR}/${DB_FILE}"
 S3_PREFIX="s3://${S3_BUCKET}/${NETWORK}"
 
-HEIGHT_TO_HASH="${DB_DIR}/height-to-hash"
-SUB_EPOCH_SUMMARIES="${DB_DIR}/sub-epoch-summaries"
+if [ "$NETWORK" = "mainnet" ]; then
+    CACHE_SUFFIX=""
+else
+    CACHE_SUFFIX="-${NETWORK}"
+fi
 
 get_local_height() {
     local_height=$(sqlite3 "$DB_PATH" "SELECT MAX(height) FROM full_blocks;" 2>/dev/null || echo "")
@@ -33,8 +36,8 @@ get_local_height() {
 delete_db_files() {
     echo "Removing existing DB and cache files..."
     rm -f "$DB_PATH" "${DB_PATH}-shm" "${DB_PATH}-wal"
-    rm -f "$HEIGHT_TO_HASH"
-    rm -f "$SUB_EPOCH_SUMMARIES"
+    rm -f "${DB_DIR}/height-to-hash" "${DB_DIR}/height-to-hash${CACHE_SUFFIX}"
+    rm -f "${DB_DIR}/sub-epoch-summaries" "${DB_DIR}/sub-epoch-summaries${CACHE_SUFFIX}"
 }
 
 download_db_from_s3() {
@@ -52,18 +55,23 @@ download_db_from_s3() {
     fi
 }
 
+has_cache_file() {
+    # Check for both suffixed and unsuffixed variants
+    [ -f "${DB_DIR}/${1}${CACHE_SUFFIX}" ] || [ -f "${DB_DIR}/${1}" ]
+}
+
 download_cache_files() {
     mkdir -p "$DB_DIR"
 
-    if [ ! -f "$HEIGHT_TO_HASH" ]; then
-        echo "Downloading height-to-hash to ${HEIGHT_TO_HASH}..."
-        aws s3 cp "${S3_PREFIX}/height-to-hash" "$HEIGHT_TO_HASH" --region "$AWS_REGION" || \
+    if ! has_cache_file "height-to-hash"; then
+        echo "Downloading height-to-hash to ${DB_DIR}/height-to-hash${CACHE_SUFFIX}..."
+        aws s3 cp "${S3_PREFIX}/height-to-hash" "${DB_DIR}/height-to-hash${CACHE_SUFFIX}" --region "$AWS_REGION" || \
             echo "WARNING: Failed to download height-to-hash, node will regenerate it"
     fi
 
-    if [ ! -f "$SUB_EPOCH_SUMMARIES" ]; then
-        echo "Downloading sub-epoch-summaries to ${SUB_EPOCH_SUMMARIES}..."
-        aws s3 cp "${S3_PREFIX}/sub-epoch-summaries" "$SUB_EPOCH_SUMMARIES" --region "$AWS_REGION" || \
+    if ! has_cache_file "sub-epoch-summaries"; then
+        echo "Downloading sub-epoch-summaries to ${DB_DIR}/sub-epoch-summaries${CACHE_SUFFIX}..."
+        aws s3 cp "${S3_PREFIX}/sub-epoch-summaries" "${DB_DIR}/sub-epoch-summaries${CACHE_SUFFIX}" --region "$AWS_REGION" || \
             echo "WARNING: Failed to download sub-epoch-summaries, node will regenerate it"
     fi
 }
