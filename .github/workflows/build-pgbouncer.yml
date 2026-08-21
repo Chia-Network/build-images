@@ -1,0 +1,40 @@
+name: Build pgBouncer Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pgbouncer/*'
+      - '.github/workflows/build-pgbouncer.yml'
+  pull_request:
+    paths:
+      - 'pgbouncer/*'
+      - '.github/workflows/build-pgbouncer.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 12 * * 5'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+
+env:
+  ALPINE_VERSION: 3.24.1
+  PGBOUNCER_VERSION: 1.25.2
+
+jobs:
+  build:
+    uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
+    with:
+      alternate-latest-mode: true
+      docker-platforms: "linux/amd64"
+      docker-context: "./pgbouncer"
+      dockerfile: "./pgbouncer/Dockerfile"
+      image_subpath: "pgbouncer"
+      additional-tag: ${{ env.PGBOUNCER_VERSION }}
+      push: ${{ github.event_name != 'pull_request' }}
+      build-args: |
+        ALPINE_VERSION=${{ env.ALPINE_VERSION }}
+        PGBOUNCER_VERSION=${{ env.PGBOUNCER_VERSION }}
