@@ -9,7 +9,6 @@ A secure Docker image for PgBouncer.
 - ⚙️ **Environment-driven configuration** - No config files needed
 - 🚀 **Multi-architecture support** - AMD64 and ARM64
 - 🔄 **Automated builds** - GitHub Actions with security scanning
-- 📊 **Health checks** - Built-in health monitoring
 - 🏷️ **Version tagging** - Docker tags match PgBouncer versions
 
 ## Quick Start
@@ -115,4 +114,4 @@ docker run -d \
 Docker image tags correspond to PgBouncer versions:
 
 - `latest` - Latest stable version
-- `1.24.0` - Specific PgBouncer version
+- `1.25.2` - Specific PgBouncer version

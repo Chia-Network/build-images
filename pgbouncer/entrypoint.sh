@@ -1,9 +1,25 @@
 #!/bin/sh
 
+# PgBouncer splits unquoted connection string values on spaces, so every value is
+# wrapped in single quotes, where a literal quote is escaped by doubling it.
+quote_value() {
+    printf "'%s'" "$(printf '%s' "$1" | sed "s/'/''/g")"
+}
+
+DB_CONNSTR="host=$(quote_value "${PGBOUNCER_DB_HOST:-localhost}")"
+DB_CONNSTR="${DB_CONNSTR} port=$(quote_value "${PGBOUNCER_DB_PORT:-5432}")"
+DB_CONNSTR="${DB_CONNSTR} dbname=$(quote_value "${PGBOUNCER_DB_NAME:-postgres}")"
+DB_CONNSTR="${DB_CONNSTR} user=$(quote_value "${PGBOUNCER_DB_USER:-postgres}")"
+# An empty value is a connection string syntax error, so omit the password
+# entirely when unset and let auth_file supply it instead.
+if [ -n "${PGBOUNCER_DB_PASSWORD:-}" ]; then
+    DB_CONNSTR="${DB_CONNSTR} password=$(quote_value "${PGBOUNCER_DB_PASSWORD}")"
+fi
+
 # Generate pgbouncer.ini from environment variables
 cat <<EOF > /etc/pgbouncer/pgbouncer.ini
 [databases]
-* = host=${PGBOUNCER_DB_HOST:-localhost} port=${PGBOUNCER_DB_PORT:-5432} dbname=${PGBOUNCER_DB_NAME:-postgres} user=${PGBOUNCER_DB_USER:-postgres} password=${PGBOUNCER_DB_PASSWORD}
+* = ${DB_CONNSTR}
 
 [pgbouncer]
 listen_addr = ${PGBOUNCER_LISTEN_ADDR:-0.0.0.0}

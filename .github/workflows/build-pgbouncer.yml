@@ -20,10 +20,6 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
   cancel-in-progress: true
 
-env:
-  ALPINE_VERSION: 3.24.1
-  PGBOUNCER_VERSION: 1.25.2
-
 jobs:
   build:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
@@ -32,8 +28,8 @@ jobs:
       docker-context: "./pgbouncer"
       dockerfile: "./pgbouncer/Dockerfile"
       image_subpath: "pgbouncer"
-      additional-tag: ${{ env.PGBOUNCER_VERSION }}
+      additional-tag: "1.25.2"
       push: ${{ github.event_name != 'pull_request' }}
       build-args: |
-        ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-        PGBOUNCER_VERSION=${{ env.PGBOUNCER_VERSION }}
+        ALPINE_VERSION=3.24.1
+        PGBOUNCER_VERSION=1.25.2
