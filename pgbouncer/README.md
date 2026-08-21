@@ -25,7 +25,7 @@ docker run -d \
   -e PGBOUNCER_DB_USER=myuser \
   -e PGBOUNCER_DB_PASSWORD=mypassword \
   -p 6432:6432 \
-  ghcr.io/starttoaster/pgbouncer:latest
+  ghcr.io/build-images/pgbouncer:latest
 ```
 
 ### With Docker Compose
@@ -34,7 +34,7 @@ docker run -d \
 version: '3.8'
 services:
   pgbouncer:
-    image: ghcr.io/starttoaster/pgbouncer:latest
+    image: ghcr.io/build-images/pgbouncer:latest
     environment:
       PGBOUNCER_DB_HOST: postgres.example.com
       PGBOUNCER_DB_PORT: 5432
@@ -49,7 +49,7 @@ services:
 
 ## Configuration
 
-All configuration is done through environment variables. See [Environment Variables](examples/environment-variables.md) for a complete list.
+All configuration is done through environment variables. See the Dockerfile for a complete list.
 
 ### Essential Variables
 
@@ -90,7 +90,7 @@ docker run -d \
   -e PGBOUNCER_LOG_CONNECTIONS=1 \
   -e PGBOUNCER_LOG_DISCONNECTIONS=1 \
   -p 6432:6432 \
-  ghcr.io/starttoaster/pgbouncer:latest
+  ghcr.io/build-images/pgbouncer:latest
 ```
 
 ### TLS Configuration
@@ -107,12 +107,8 @@ docker run -d \
   -v /path/to/certs:/etc/ssl/certs:ro \
   -v /path/to/private:/etc/ssl/private:ro \
   -p 6432:6432 \
-  ghcr.io/starttoaster/pgbouncer:latest
+  ghcr.io/build-images/pgbouncer:latest
 ```
-
-### Kubernetes Deployment
-
-See [kubernetes-deployment.yaml](examples/kubernetes-deployment.yaml) for a complete Kubernetes example.
 
 ## Versioning
 
