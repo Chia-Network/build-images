@@ -29,7 +29,6 @@ jobs:
     uses: Chia-Network/actions/.github/workflows/docker-build.yaml@main
     with:
       alternate-latest-mode: true
-      docker-platforms: "linux/amd64"
       docker-context: "./pgbouncer"
       dockerfile: "./pgbouncer/Dockerfile"
       image_subpath: "pgbouncer"
