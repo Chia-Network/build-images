@@ -66,7 +66,7 @@ elif [ "${PGBOUNCER_AUTH_TYPE:-md5}" = "trust" ] && [ -n "${PGBOUNCER_DB_USER:-}
     echo "\"${PGBOUNCER_DB_USER}\" \"\"" > /etc/pgbouncer/userlist.txt
 elif [ -n "${PGBOUNCER_DB_USER:-}" ] && [ -n "${PGBOUNCER_DB_PASSWORD:-}" ]; then
     # Generate userlist from database credentials
-    echo "\"${PGBOUNCER_DB_USER}\" \"md5$(echo -n "${PGBOUNCER_DB_PASSWORD}${PGBOUNCER_DB_USER}" | md5sum | cut -d' ' -f1)\"" > /etc/pgbouncer/userlist.txt
+    echo "\"${PGBOUNCER_DB_USER}\" \"md5$(printf '%s' "${PGBOUNCER_DB_PASSWORD}${PGBOUNCER_DB_USER}" | md5sum | cut -d' ' -f1)\"" > /etc/pgbouncer/userlist.txt
 fi
 
 # Set proper permissions on config and userlist
