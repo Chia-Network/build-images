@@ -29,7 +29,9 @@ jobs:
       - name: Get latest WP version
         id: wp-version
         run: |
-          WP_VERSION=$(curl -s https://latest.cmm.io/wordpress | sed 's/\([0-9]*\.[0-9]*\)\.0$/\1/')
+          WP_VERSION=$(curl -fsSL https://api.wordpress.org/core/version-check/1.7/ \
+            | jq -r '.offers[0].version' \
+            | sed 's/\([0-9]*\.[0-9]*\)\.0$/\1/')
           echo "WP_VERSION=$WP_VERSION" >$GITHUB_OUTPUT
 
   build:
