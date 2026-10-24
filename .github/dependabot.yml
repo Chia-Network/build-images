@@ -1,0 +1,34 @@
+# This file is managed by the repo-content-updater project. Manual changes here will result in a PR to bring back
+# inline with the upstream template, unless you add !dependabot to the repo's managed-files property
+# repo-content-updater:dependabot
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directories: ["/", "/.github/actions/*"]
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    rebase-strategy: auto
+    labels:
+      - dependencies
+      - github_actions
+      - "Changed"
+    reviewers: ["cameroncooper", "emlowe"]
+  - package-ecosystem: docker
+    directories: ["/alpine", "/aptly", "/centos-pypa-rust-aarch64", "/centos-pypa-rust-x86_64", "/db-webroot-backup", "/ips", "/manylinux_cuda_aarch64", "/manylinux_cuda_x86_64", "/nginx", "/pgbouncer", "/phpfpm", "/rocky8", "/ubuntu-18.04", "/ubuntu-20.04", "/ubuntu-22.04", "/ubuntu-22.04-risc", "/ubuntu-24.04", "/ubuntu-24.04-risc", "/wordpress"]
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    rebase-strategy: auto
+    labels:
+      - dependencies
+      - docker
+      - "Changed"
+    reviewers: ["cameroncooper", "emlowe"]
